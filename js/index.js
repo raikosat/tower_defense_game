@@ -116,7 +116,12 @@ function animate() {
     // tracking total amount of enemies
     if (enemies.length === 0) {
         wave++;
-        spawnEnemies();
+        if (wave < waves.length) {
+            spawnEnemies();
+        } else {
+            document.querySelector('#gameOver').innerHTML = "WIN";
+            document.querySelector('#gameOver').style.display = 'flex';
+        }
     }
 
     placementTiles.forEach((tile) => {
@@ -198,11 +203,12 @@ canvas.addEventListener('click', (event) => {
         buildings.sort((a, b) => {
             return a.position.y - b.position.y
         });
-    } else if (activeTile.isOccupied && coins >= 150 * activeTile.building.lv && activeTile.building.lv < 3) {
+    } else if (activeTile && activeTile.isOccupied && coins >= activeTile.building.upLvPrice * activeTile.building.lv && activeTile.building.lv < 3) {
         // tower up level
         document.querySelector('#dialog').style.display = 'flex';
         upActiveTile = activeTile;
     }
+    console.log();
 });
 
 window.addEventListener('mousemove', (event) => {
