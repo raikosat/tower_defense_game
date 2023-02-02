@@ -1,5 +1,5 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 } }) {
+    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100 }) {
         super({
             position, imageSrc: 'img/orc.png', frames: {
                 max: 7
@@ -14,21 +14,27 @@ class Enemy extends Sprite {
             y: this.position.y + (this.height / 2)
         };
         this.radius = 50;
-        this.health = 100;
+        this.health = health;
+        this.healthMax = healthMax;
         this.velocity = {
             x: 0,
             y: 0
-        }
+        };
+        this.bounes = 5;
+        this.lv = lv;
     }
 
     draw() {
         super.draw();
+        c.fillStyle = 'white';
+        c.fillText('Lv' + this.lv, this.position.x + 55, this.position.y + 75);
+
         // health bar
         c.fillStyle = 'red';
         c.fillRect(this.position.x, this.position.y - 15, this.width, 10);
 
         c.fillStyle = 'green';
-        c.fillRect(this.position.x, this.position.y - 15, this.width * this.health / 100, 10);
+        c.fillRect(this.position.x, this.position.y - 15, this.width * (this.health / this.healthMax), 10);
     }
 
     update() {
@@ -39,7 +45,7 @@ class Enemy extends Sprite {
         const xDistance = waypoint.x - this.center.x;
         const angle = Math.atan2(yDistance, xDistance);
 
-        const speed = 3;
+        const speed = 1;
         this.velocity.x = Math.cos(angle) * speed;
         this.velocity.y = Math.sin(angle) * speed;
 

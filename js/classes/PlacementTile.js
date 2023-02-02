@@ -4,6 +4,7 @@ class PlacementTile {
         this.size = 64;
         this.color = 'rgba(255, 255, 255, 0.15)';
         this.isOccupied = false;
+        this.building;
     }
 
     draw() {

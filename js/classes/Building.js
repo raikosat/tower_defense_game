@@ -22,10 +22,21 @@ class Building extends Sprite {
         this.radius = 250;
         this.target;
         this.elapsedSpawnTime = 0;
+        this.lv = 1;
+        this.damage = 10;
+        this.upLvPrice = 150;
     }
 
     draw() {
         super.draw();
+        // tower lv
+        c.fillStyle = 'white';
+        c.fillText('Lv' + this.lv, this.position.x + 115, this.position.y + 55);
+
+        // up lv required
+        if (this.lv < 3) {
+            c.fillText(this.upLvPrice + 'Up', this.position.x + 115, this.position.y);
+        }
 
         // c.beginPath();
         // c.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);

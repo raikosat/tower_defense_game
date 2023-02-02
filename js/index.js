@@ -1,18 +1,33 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-
 canvas.width = 1280;
 canvas.height = 768;
 c.fillStyle = 'white';
 c.fillRect(0, 0, canvas.width, canvas.height);
 
 const placementTilesData2D = [];
+const buildings = [];
+const placementTiles = [];
+const explosions = [];
+const enemies = [];
+const image = new Image();
+image.src = './img/gameMap.png';
+const mouse = {
+    x: undefined,
+    y: undefined
+}
+const priceTower = 50;
+let activeTile = undefined;
+let upActiveTile = undefined;
+let wave = 1;
+let waves = rounds;
+let enemyCount = 3;
+let hearts = 10;
+let coins = 100;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
 }
-
-const placementTiles = [];
 
 placementTilesData2D.forEach((row, y) => {
     row.forEach((symbol, x) => {
@@ -30,38 +45,48 @@ placementTilesData2D.forEach((row, y) => {
     });
 });
 
-const image = new Image();
 image.onload = () => {
     animate();
 }
-image.src = './img/gameMap.png';
 
-const enemies = [];
+function spawnEnemies() {
+    showWave();
+    const round = waves[wave - 1];
+    const enemiesRound = round.enemies;
 
-function spawnEnemies(spawnCount) {
-    for (let i = 1; i < spawnCount + 1; i++) {
-        const xOffset = i * 150;
-        enemies.push(new Enemy({
-            position: {
-                x: waypoints[0].x - xOffset,
-                y: waypoints[0].y
-            }
-        }));
+    let count = 1;
+    for (let k = 0; k < enemiesRound.length; k++) {
+        const enemiesDetails = enemiesRound[k];
+        for (let i = 1; i < enemiesDetails.count + 1; i++) {
+            const xOffset = count * 100;
+            count++;
+            enemies.push(new Enemy({
+                position: {
+                    x: waypoints[0].x - xOffset,
+                    y: waypoints[0].y
+                },
+                lv: enemiesDetails.lv,
+                health: 100 + ((enemiesDetails.lv - 1) * 50),
+                healthMax: 100 + ((enemiesDetails.lv - 1) * 50)
+            }));
 
+        }
     }
 }
+spawnEnemies();
 
-const buildings = [];
-let activeTile = undefined;
-let enemyCount = 3;
-let hearts = 10;
-let coins = 100;
-const explosions = [];
-spawnEnemies(enemyCount);
+function showWave() {
+    document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
+    document.querySelector('#wave').style.display = 'flex';
+    setTimeout(() => {
+        document.querySelector('#wave').style.display = 'none';
+    }, 1000)
+}
 
 function animate() {
     const animationId = requestAnimationFrame(animate);
     c.drawImage(image, 0, 0);
+    document.querySelector('#coins').innerHTML = coins;
 
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
@@ -72,7 +97,6 @@ function animate() {
             document.querySelector('#hearts').innerHTML = hearts;
 
             if (hearts === 0) {
-                console.log('Game over');
                 cancelAnimationFrame(animationId);
                 document.querySelector('#gameOver').style.display = 'flex';
             }
@@ -91,8 +115,8 @@ function animate() {
 
     // tracking total amount of enemies
     if (enemies.length === 0) {
-        enemyCount += 2;
-        spawnEnemies(enemyCount);
+        wave++;
+        spawnEnemies();
     }
 
     placementTiles.forEach((tile) => {
@@ -121,14 +145,14 @@ function animate() {
             // this is when a projectile hits an enemy
             if (distance < projectile.enemy.radius + projectile.radius) {
                 // enemy health and enemy removal
-                projectile.enemy.health -= 20;
+                projectile.enemy.health -= building.damage * building.lv;
                 if (projectile.enemy.health <= 0) {
                     const enemyIndex = enemies.findIndex((enemy) => {
                         return projectile.enemy === enemy;
                     });
                     if (enemyIndex > -1) {
                         enemies.splice(enemyIndex, 1);
-                        coins += 25;
+                        coins += projectile.enemy.bounes;
                         document.querySelector('#coins').innerHTML = coins;
                     };
                 }
@@ -144,25 +168,40 @@ function animate() {
     });
 }
 
-const mouse = {
-    x: undefined,
-    y: undefined
+function upLvTower() {
+    if (upActiveTile && upActiveTile.isOccupied && coins >= 150 * upActiveTile.building.lv && upActiveTile.building.lv < 3) {
+        coins -= 150 * upActiveTile.building.lv;
+        upActiveTile.building.lv += 1;
+        upActiveTile.building.upLvPrice = upActiveTile.building.lv * 150;
+        document.querySelector('#dialog').style.display = 'none';
+        upActiveTile = null;
+    }
+}
+
+function closeDialog() {
+    document.querySelector('#dialog').style.display = 'none';
 }
 
 canvas.addEventListener('click', (event) => {
-    if (activeTile && !activeTile.isOccupied && coins - 50 >= 0) {
-        coins -= 50;
-        document.querySelector('#coins').innerHTML = coins;
-        buildings.push(new Building({
+    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0) {
+        // new building
+        coins -= priceTower;
+        const building = new Building({
             position: {
                 x: activeTile.position.x,
                 y: activeTile.position.y
             }
-        }));
+        });
+        buildings.push(building);
+        activeTile.building = building;
         activeTile.isOccupied = true;
         buildings.sort((a, b) => {
             return a.position.y - b.position.y
         });
+    } else if (activeTile.isOccupied && coins >= 150 * activeTile.building.lv && activeTile.building.lv < 3) {
+        // tower up level
+        document.querySelector('#dialog').style.display = 'flex';
+        upActiveTile = activeTile;
     }
 });
 
@@ -180,5 +219,4 @@ window.addEventListener('mousemove', (event) => {
         }
 
     }
-
 });
