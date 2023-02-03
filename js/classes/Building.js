@@ -24,7 +24,7 @@ class Building extends Sprite {
         this.elapsedSpawnTime = 0;
         this.lv = 1;
         this.damage = 10;
-        this.upLvPrice = 100;
+        this.upLvPrice = 50;
         this.shop = false;
         this.xShop = this.center.x - 50;
         this.yShop = this.center.y - 240;

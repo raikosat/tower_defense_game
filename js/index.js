@@ -25,7 +25,7 @@ let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
-let coins = 100;
+let coins = 250;
 let shop = false;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
