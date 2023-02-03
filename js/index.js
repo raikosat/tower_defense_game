@@ -10,6 +10,7 @@ const buildings = [];
 const placementTiles = [];
 const explosions = [];
 const enemies = [];
+const enemiesDie = [];
 const image = new Image();
 image.src = './img/gameMap.png';
 const mouse = {
@@ -67,7 +68,9 @@ function spawnEnemies() {
                 },
                 lv: enemiesDetails.lv,
                 health: 100 + ((enemiesDetails.lv - 1) * 50),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * 50)
+                healthMax: 100 + ((enemiesDetails.lv - 1) * 50),
+                imageSrc: 'img/orc.png',
+                framesMax: 7
             }));
 
         }
@@ -110,6 +113,16 @@ function animate() {
 
         if (explosion.frames.current >= explosion.frames.max - 1) {
             explosions.splice(i, 1);
+        }
+    }
+
+    for (let i = enemiesDie.length - 1; i >= 0; i--) {
+        const enemyDie = enemiesDie[i];
+        enemyDie.draw();
+        enemyDie.update();
+
+        if (enemyDie.frames.current >= enemyDie.frames.max - 1) {
+            enemiesDie.splice(i, 1);
         }
     }
 
@@ -156,6 +169,18 @@ function animate() {
                         return projectile.enemy === enemy;
                     });
                     if (enemyIndex > -1) {
+                        enemiesDie.push(new Enemy({
+                            position: {
+                                x: projectile.enemy.position.x,
+                                y: projectile.enemy.position.y
+                            },
+                            lv: projectile.enemy.lv,
+                            health: 0,
+                            healthMax: 100 + ((projectile.enemy.lv - 1) * 50),
+                            imageSrc: 'img/orcdie.png',
+                            framesMax: 7
+                        }));
+
                         enemies.splice(enemyIndex, 1);
                         coins += projectile.enemy.bounes;
                         document.querySelector('#coins').innerHTML = coins;
