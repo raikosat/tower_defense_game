@@ -25,6 +25,7 @@ let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
 let coins = 100;
+let shop = false;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
@@ -223,8 +224,6 @@ function upLvTower() {
         coins -= upActiveTile.building.upLvPrice;
         upActiveTile.building.lv += 1;
         upActiveTile.building.upLvPrice = upActiveTile.building.lv * upActiveTile.building.upLvPrice;
-        document.querySelector('#dialog').style.display = 'none';
-        upActiveTile = null;
     }
 }
 
@@ -251,7 +250,7 @@ function sound(soundSrc) {
 }
 
 canvas.addEventListener('click', (event) => {
-    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0) {
+    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0 && !shop) {
         // new building
         coins -= priceTower;
         const building = new Building({
@@ -266,10 +265,23 @@ canvas.addEventListener('click', (event) => {
         buildings.sort((a, b) => {
             return a.position.y - b.position.y
         });
+    } else if (
+        upActiveTile && shop &&
+        event.clientX >= upActiveTile.building.xShop &&
+        event.clientX <= upActiveTile.building.xShop + upActiveTile.building.wShop &&
+        event.clientY >= upActiveTile.building.yShop &&
+        event.clientY <= upActiveTile.building.yShop + upActiveTile.building.hShop
+    ) {
+        upLvTower();
     } else if (checkUpLvTower(activeTile)) {
         // tower up level
-        document.querySelector('#dialog').style.display = 'flex';
         upActiveTile = activeTile;
+
+        activeTile.building.shop = !activeTile.building.shop;
+        shop = activeTile.building.shop;
+    } else if (activeTile && activeTile.isOccupied) {
+        activeTile.building.shop = !activeTile.building.shop;
+        shop = activeTile.building.shop;
     }
 });
 

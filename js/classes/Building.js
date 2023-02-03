@@ -25,6 +25,11 @@ class Building extends Sprite {
         this.lv = 1;
         this.damage = 10;
         this.upLvPrice = 100;
+        this.shop = false;
+        this.xShop = this.center.x - 50;
+        this.yShop = this.center.y - 240;
+        this.wShop = 80;
+        this.hShop = 80;
     }
 
     draw() {
@@ -38,10 +43,22 @@ class Building extends Sprite {
             c.fillText(this.upLvPrice + 'Up', this.position.x + 115, this.position.y);
         }
 
-        // c.beginPath();
-        // c.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
-        // c.fillStyle = 'rgba(0, 0, 255, 0.2)';
-        // c.fill();
+        if (this.shop) {
+            c.beginPath();
+            c.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
+            c.fillStyle = 'rgba(0, 0, 255, 0.2)';
+            c.fill();
+
+            if (this.lv < 3) {
+                c.fillStyle = 'yellow';
+                c.fillRect(this.xShop, this.yShop, this.wShop, this.hShop);
+                c.font = "12px Changa One";
+                c.fillStyle = 'black';
+                c.fillText('Up Lv' + (this.lv + 1), this.center.x - 25, this.center.y - 210);
+                c.fillText(this.upLvPrice + 'G', this.center.x - 25, this.center.y - 190);
+            }
+        }
+
     }
 
     update() {
