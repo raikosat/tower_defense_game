@@ -67,10 +67,12 @@ function spawnEnemies() {
                     y: waypoints[0].y
                 },
                 lv: enemiesDetails.lv,
-                health: 100 + ((enemiesDetails.lv - 1) * 50),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * 50),
+                health: 100 + ((enemiesDetails.lv - 1) * (enemiesDetails.lv === 3 ? 150 : 50)),
+                healthMax: 100 + ((enemiesDetails.lv - 1) * (enemiesDetails.lv === 3 ? 150 : 50)),
                 imageSrc: 'img/orc.png',
-                framesMax: 7
+                framesMax: 7,
+                scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
+                offset: (enemiesDetails.lv === 3 ? {x: 0, y: -40} : {x: 0, y: 0})
             }));
 
         }

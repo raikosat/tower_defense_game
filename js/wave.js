@@ -9,4 +9,5 @@ rounds = [
     { wave: 8, enemies: [{ lv: 1, count: 11 }, { lv: 2, count: 5 }] },
     { wave: 9, enemies: [{ lv: 1, count: 11 }, { lv: 2, count: 6 }] },
     { wave: 10, enemies: [{ lv: 1, count: 11 }, { lv: 2, count: 7 }] },
+    { wave: 11, enemies: [{ lv: 3, count: 5 }] },
 ];

@@ -1,9 +1,11 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100, imageSrc, framesMax }) {
+    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100, imageSrc, framesMax, scale, offset }) {
         super({
             position, imageSrc: imageSrc, frames: {
                 max: framesMax
-            }
+            },
+            scale: scale,
+            offset: offset
         });
         this.position = position;
         this.width = 100;
@@ -27,14 +29,18 @@ class Enemy extends Sprite {
     draw() {
         super.draw();
         c.fillStyle = 'white';
-        c.fillText('Lv' + this.lv, this.position.x + 55, this.position.y + 75);
+        const xoffsetLv = this.lv === 3 ? 100 : 55;
+        const yoffsetLv = 75;
+        c.fillText('Lv' + this.lv, this.position.x + xoffsetLv + this.offset.x, this.position.y + yoffsetLv);
 
         // health bar
+        const xoffsetHealth = this.lv === 3 ? 20 : 0;
+        const yoffsetHealth = this.lv === 3 ? 50 : 15;
         c.fillStyle = 'red';
-        c.fillRect(this.position.x, this.position.y - 15, this.width, 10);
+        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, this.width, 10);
 
         c.fillStyle = 'green';
-        c.fillRect(this.position.x, this.position.y - 15, this.width * (this.health / this.healthMax), 10);
+        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, this.width * (this.health / this.healthMax), 10);
     }
 
     update() {
