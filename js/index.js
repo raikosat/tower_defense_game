@@ -24,7 +24,7 @@ let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
-let coins = 1000;
+let coins = 100;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
