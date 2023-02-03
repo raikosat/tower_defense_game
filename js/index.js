@@ -67,8 +67,8 @@ function spawnEnemies() {
                     y: waypoints[0].y
                 },
                 lv: enemiesDetails.lv,
-                health: 100 + ((enemiesDetails.lv - 1) * (enemiesDetails.lv === 3 ? 150 : 50)),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * (enemiesDetails.lv === 3 ? 150 : 50)),
+                health: 100 + ((enemiesDetails.lv - 1) * 50),
+                healthMax: 100 + ((enemiesDetails.lv - 1) * 50),
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
                 scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
@@ -131,7 +131,7 @@ function animate() {
     // tracking total amount of enemies
     if (enemies.length === 0) {
         wave++;
-        if (wave < waves.length) {
+        if (wave <= waves.length) {
             spawnEnemies();
         } else {
             document.querySelector('#gameOver').innerHTML = "WIN";
