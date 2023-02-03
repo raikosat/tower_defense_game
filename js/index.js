@@ -72,7 +72,7 @@ function spawnEnemies() {
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
                 scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
-                offset: (enemiesDetails.lv === 3 ? {x: 0, y: -40} : {x: 0, y: 0})
+                offset: (enemiesDetails.lv === 3 ? { x: 0, y: -40 } : { x: 0, y: 0 })
             }));
 
         }
@@ -201,13 +201,20 @@ function animate() {
 }
 
 function upLvTower() {
-    if (upActiveTile && upActiveTile.isOccupied && coins >= 150 * upActiveTile.building.lv && upActiveTile.building.lv < 3) {
+    if (checkUpLVTower()) {
         coins -= 150 * upActiveTile.building.lv;
         upActiveTile.building.lv += 1;
         upActiveTile.building.upLvPrice = upActiveTile.building.lv * 150;
         document.querySelector('#dialog').style.display = 'none';
         upActiveTile = null;
     }
+}
+
+function checkUpLVTower() {
+    return (upActiveTile
+        && upActiveTile.isOccupied
+        && coins >= activeTile.building.upLvPrice * upActiveTile.building.lv
+        && upActiveTile.building.lv < 3);
 }
 
 function closeDialog() {
@@ -230,7 +237,7 @@ canvas.addEventListener('click', (event) => {
         buildings.sort((a, b) => {
             return a.position.y - b.position.y
         });
-    } else if (activeTile && activeTile.isOccupied && coins >= activeTile.building.upLvPrice * activeTile.building.lv && activeTile.building.lv < 3) {
+    } else if (checkUpLVTower()) {
         // tower up level
         document.querySelector('#dialog').style.display = 'flex';
         upActiveTile = activeTile;
