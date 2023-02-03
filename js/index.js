@@ -3,6 +3,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1280;
 canvas.height = 768;
 c.fillStyle = 'white';
+c.font = "12px Changa One";
 c.fillRect(0, 0, canvas.width, canvas.height);
 
 const placementTilesData2D = [];
@@ -53,6 +54,7 @@ function soundBackground() {
     sound.setAttribute("preload", "auto");
     sound.setAttribute("controls", "none");
     sound.style.display = "none";
+    sound.loop = true;
     document.body.appendChild(sound);
     sound.play();
 }
@@ -85,13 +87,13 @@ function spawnEnemies() {
                     y: waypoints[0].y
                 },
                 lv: enemiesDetails.lv,
-                health: 100 + ((enemiesDetails.lv - 1) * 100),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * 100),
+                health: 100 + ((enemiesDetails.lv - 1) * 150),
+                healthMax: 100 + ((enemiesDetails.lv - 1) * 150),
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
                 scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
                 offset: (enemiesDetails.lv === 3 ? { x: 0, y: -40 } : { x: 0, y: 0 }),
-                speed: (enemiesDetails.lv === 2 ? 1.1 : 1)
+                speed: (enemiesDetails.lv === 2 ? 1.3 : enemiesDetails.lv === 3 ? 1.2 : 1)
             }));
 
         }

@@ -52,7 +52,6 @@ class Building extends Sprite {
             if (this.lv < 3) {
                 c.fillStyle = 'yellow';
                 c.fillRect(this.xShop, this.yShop, this.wShop, this.hShop);
-                c.font = "12px Changa One";
                 c.fillStyle = 'black';
                 c.fillText('Up Lv' + (this.lv + 1), this.center.x - 25, this.center.y - 210);
                 c.fillText(this.upLvPrice + 'G', this.center.x - 25, this.center.y - 190);
