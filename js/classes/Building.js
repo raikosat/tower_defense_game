@@ -51,6 +51,18 @@ class Building extends Sprite {
     }
 
     shoot() {
+        var sound = document.createElement("audio");
+        sound.src = './sound/stone-shooting.mp3';
+        sound.setAttribute("preload", "auto");
+        sound.setAttribute("controls", "none");
+        sound.style.display = "none";
+        document.body.appendChild(sound);
+        sound.volume = 0.5;
+        sound.play();
+
+        setTimeout(() => {
+            sound.remove();
+        }, 500);
         this.projectiles.push(
             new Projecttile({
                 position: {

@@ -46,8 +46,25 @@ placementTilesData2D.forEach((row, y) => {
     });
 });
 
+function soundBackground() {
+    var sound = document.createElement("audio");
+    sound.src = './sound/sound-background.mp3';
+    sound.setAttribute("preload", "auto");
+    sound.setAttribute("controls", "none");
+    sound.style.display = "none";
+    document.body.appendChild(sound);
+    sound.play();
+}
+
 image.onload = () => {
+    c.drawImage(image, 0, 0);
+}
+
+function startGame() {
+    soundBackground();
+    spawnEnemies();
     animate();
+    document.querySelector('#startGame').style.display = 'none';
 }
 
 function spawnEnemies() {
@@ -67,18 +84,18 @@ function spawnEnemies() {
                     y: waypoints[0].y
                 },
                 lv: enemiesDetails.lv,
-                health: 100 + ((enemiesDetails.lv - 1) * 50),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * 50),
+                health: 100 + ((enemiesDetails.lv - 1) * 100),
+                healthMax: 100 + ((enemiesDetails.lv - 1) * 100),
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
                 scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
-                offset: (enemiesDetails.lv === 3 ? { x: 0, y: -40 } : { x: 0, y: 0 })
+                offset: (enemiesDetails.lv === 3 ? { x: 0, y: -40 } : { x: 0, y: 0 }),
+                speed: (enemiesDetails.lv === 2 ? 1.1 : 1)
             }));
 
         }
     }
 }
-spawnEnemies();
 
 function showWave() {
     document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
@@ -171,6 +188,7 @@ function animate() {
                         return projectile.enemy === enemy;
                     });
                     if (enemyIndex > -1) {
+                        sound('./sound/orc-death.mp3');
                         enemiesDie.push(new Enemy({
                             position: {
                                 x: projectile.enemy.position.x,
@@ -217,6 +235,19 @@ function checkUpLvTower(activeTile) {
 function closeDialog() {
     document.querySelector('#dialog').style.display = 'none';
     upActiveTile = null;
+}
+
+function sound(soundSrc) {
+    var sound = document.createElement("audio");
+    sound.src = soundSrc;
+    sound.setAttribute("preload", "auto");
+    sound.setAttribute("controls", "none");
+    sound.style.display = "none";
+    document.body.appendChild(sound);
+    sound.play();
+    setTimeout(() => {
+        sound.remove();
+    }, 500);
 }
 
 canvas.addEventListener('click', (event) => {
