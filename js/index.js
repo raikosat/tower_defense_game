@@ -88,7 +88,7 @@ function spawnEnemies() {
                 healthMax: 100,
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
-                scale: 1,
+                scale: 0.7,
                 offset: { x: 0, y: 0 },
                 speed: 1
             }));
@@ -188,29 +188,14 @@ function animate() {
                         return projectile.enemy === enemy;
                     });
                     if (enemyIndex > -1) {
-                        sound('./sound/orc-death.mp3');
-                        enemiesDie.push(new Enemy({
-                            position: {
-                                x: projectile.enemy.position.x,
-                                y: projectile.enemy.position.y
-                            },
-                            health: 0,
-                            healthMax: 100,
-                            imageSrc: 'img/orcdie.png',
-                            framesMax: 7
-                        }));
+                        this.createEnemyDie(projectile);
 
                         enemies.splice(enemyIndex, 1);
                         coins += projectile.enemy.bounes;
                         document.querySelector('#coins').innerHTML = coins;
                     };
                 }
-                explosions.push(new Sprite({
-                    position: { x: projectile.position.x, y: projectile.position.y },
-                    imageSrc: './img/explosion.png',
-                    frames: { max: 4 },
-                    offset: { x: 0, y: 0 }
-                }));
+                this.createExplosions(projectile);
                 building.projectiles.splice(i, 1);
             }
         }
@@ -238,7 +223,8 @@ canvas.addEventListener('click', (event) => {
             position: {
                 x: activeTile.position.x,
                 y: activeTile.position.y
-            }
+            },
+            scale: 0.5
         });
         buildings.push(building);
         activeTile.building = building;
@@ -264,3 +250,28 @@ window.addEventListener('mousemove', (event) => {
 
     }
 });
+
+function createEnemyDie(projectile) {
+    sound('./sound/orc-death.mp3');
+    enemiesDie.push(new Enemy({
+        position: {
+            x: projectile.enemy.position.x,
+            y: projectile.enemy.position.y
+        },
+        health: 0,
+        healthMax: 100,
+        imageSrc: 'img/orcdie.png',
+        framesMax: 7,
+        scale: 0.7
+    }));
+}
+
+function createExplosions(projectile) {
+    explosions.push(new Sprite({
+        position: { x: projectile.position.x, y: projectile.position.y },
+        imageSrc: './img/explosion.png',
+        frames: { max: 4 },
+        offset: { x: 0, y: 0 },
+        scale: 0.5
+    }));
+}

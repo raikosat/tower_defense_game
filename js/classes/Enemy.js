@@ -15,7 +15,7 @@ class Enemy extends Sprite {
             x: this.position.x + (this.width / 2),
             y: this.position.y + (this.height / 2)
         };
-        this.radius = 50;
+        this.radius = 10;
         this.health = health;
         this.healthMax = healthMax;
         this.velocity = {
@@ -28,14 +28,7 @@ class Enemy extends Sprite {
 
     draw() {
         super.draw();
-        // health bar
-        const xoffsetHealth = 0;
-        const yoffsetHealth = 15;
-        c.fillStyle = 'red';
-        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, this.width, 10);
-
-        c.fillStyle = 'green';
-        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, this.width * (this.health / this.healthMax), 10);
+        this.drawHealthBar();
     }
 
     update() {
@@ -63,5 +56,17 @@ class Enemy extends Sprite {
         ) {
             this.waypointIndex += 1;
         }
+    }
+
+    drawHealthBar() {
+        const widthHealth = this.width * this.scale;
+        // health bar
+        const xoffsetHealth = 0;
+        const yoffsetHealth = 15;
+        c.fillStyle = 'red';
+        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, widthHealth, 5);
+
+        c.fillStyle = 'green';
+        c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, widthHealth * (this.health / this.healthMax), 5);
     }
 }
