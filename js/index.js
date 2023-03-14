@@ -20,13 +20,11 @@ const mouse = {
 }
 const priceTower = 50;
 let activeTile = undefined;
-let upActiveTile = undefined;
 let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
-let shop = false;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
@@ -86,14 +84,13 @@ function spawnEnemies() {
                     x: waypoints[0].x - xOffset,
                     y: waypoints[0].y
                 },
-                lv: enemiesDetails.lv,
-                health: 100 + ((enemiesDetails.lv - 1) * 150),
-                healthMax: 100 + ((enemiesDetails.lv - 1) * 150),
+                health: 100,
+                healthMax: 100,
                 imageSrc: 'img/orc.png',
                 framesMax: 7,
-                scale: (enemiesDetails.lv === 3 ? 1.5 : 1),
-                offset: (enemiesDetails.lv === 3 ? { x: 0, y: -40 } : { x: 0, y: 0 }),
-                speed: (enemiesDetails.lv === 2 ? 1.3 : enemiesDetails.lv === 3 ? 1.2 : 1)
+                scale: 1,
+                offset: { x: 0, y: 0 },
+                speed: 1
             }));
 
         }
@@ -185,7 +182,7 @@ function animate() {
             // this is when a projectile hits an enemy
             if (distance < projectile.enemy.radius + projectile.radius) {
                 // enemy health and enemy removal
-                projectile.enemy.health -= building.damage * building.lv;
+                projectile.enemy.health -= building.damage;
                 if (projectile.enemy.health <= 0) {
                     const enemyIndex = enemies.findIndex((enemy) => {
                         return projectile.enemy === enemy;
@@ -197,9 +194,8 @@ function animate() {
                                 x: projectile.enemy.position.x,
                                 y: projectile.enemy.position.y
                             },
-                            lv: projectile.enemy.lv,
                             health: 0,
-                            healthMax: 100 + ((projectile.enemy.lv - 1) * 50),
+                            healthMax: 100,
                             imageSrc: 'img/orcdie.png',
                             framesMax: 7
                         }));
@@ -221,23 +217,6 @@ function animate() {
     });
 }
 
-function upLvTower() {
-    if (checkUpLvTower(upActiveTile)) {
-        coins -= upActiveTile.building.upLvPrice;
-        upActiveTile.building.lv += 1;
-        upActiveTile.building.upLvPrice = upActiveTile.building.lv * upActiveTile.building.upLvPrice;
-    }
-}
-
-function checkUpLvTower(activeTile) {
-    return (activeTile && activeTile.isOccupied && coins >= activeTile.building.upLvPrice * activeTile.building.lv && activeTile.building.lv < 3);
-}
-
-function closeDialog() {
-    document.querySelector('#dialog').style.display = 'none';
-    upActiveTile = null;
-}
-
 function sound(soundSrc) {
     var sound = document.createElement("audio");
     sound.src = soundSrc;
@@ -252,7 +231,7 @@ function sound(soundSrc) {
 }
 
 canvas.addEventListener('click', (event) => {
-    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0 && !shop) {
+    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0) {
         // new building
         coins -= priceTower;
         const building = new Building({
@@ -267,23 +246,6 @@ canvas.addEventListener('click', (event) => {
         buildings.sort((a, b) => {
             return a.position.y - b.position.y
         });
-    } else if (
-        upActiveTile && shop &&
-        event.clientX >= upActiveTile.building.xShop &&
-        event.clientX <= upActiveTile.building.xShop + upActiveTile.building.wShop &&
-        event.clientY >= upActiveTile.building.yShop &&
-        event.clientY <= upActiveTile.building.yShop + upActiveTile.building.hShop
-    ) {
-        upLvTower();
-    } else if (checkUpLvTower(activeTile)) {
-        // tower up level
-        upActiveTile = activeTile;
-
-        activeTile.building.shop = !activeTile.building.shop;
-        shop = activeTile.building.shop;
-    } else if (activeTile && activeTile.isOccupied) {
-        activeTile.building.shop = !activeTile.building.shop;
-        shop = activeTile.building.shop;
     }
 });
 
