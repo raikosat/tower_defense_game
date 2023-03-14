@@ -1,5 +1,5 @@
 class Building extends Sprite {
-    constructor({ position = { x: 0, y: 0 } }) {
+    constructor({ position = { x: 0, y: 0 }, scale }) {
         super({
             position,
             imageSrc: 'img/tower.png',
@@ -8,9 +8,10 @@ class Building extends Sprite {
 
             },
             offset: {
-                x: 0,
-                y: -80
-            }
+                x: 2,
+                y: -20
+            },
+            scale: scale
         });
         this.width = 64 * 2;
         this.height = 64;
@@ -53,13 +54,15 @@ class Building extends Sprite {
         setTimeout(() => {
             sound.remove();
         }, 500);
+        console.log('shoot');
         this.projectiles.push(
             new Projecttile({
                 position: {
-                    x: this.center.x - 20,
-                    y: this.center.y - 110
+                    x: this.center.x - 40,
+                    y: this.center.y - 50
                 },
-                enemy: this.target
+                enemy: this.target,
+                scale: 0.5
             })
         );
     }

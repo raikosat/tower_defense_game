@@ -14,6 +14,9 @@ class Sprite {
     }
 
     draw() {
+        c.strokeStyle = 'white';
+        c.strokeRect(this.position.x, this.position.y, this.image.width / this.frames.max, this.image.height);
+
         const cropWidth = this.image.width / this.frames.max;
         const crop = {
             position: {
@@ -22,7 +25,7 @@ class Sprite {
             },
             width: cropWidth,
             height: this.image.height
-        }
+        };
         c.drawImage(
             this.image,
             crop.position.x,
