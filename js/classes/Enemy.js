@@ -23,20 +23,14 @@ class Enemy extends Sprite {
             y: 0
         };
         this.bounes = 5;
-        this.lv = lv;
         this.speed = speed;
     }
 
     draw() {
         super.draw();
-        c.fillStyle = 'white';
-        const xoffsetLv = this.lv === 3 ? 100 : 55;
-        const yoffsetLv = 75;
-        c.fillText('Lv' + this.lv, this.position.x + xoffsetLv + this.offset.x, this.position.y + yoffsetLv);
-
         // health bar
-        const xoffsetHealth = this.lv === 3 ? 20 : 0;
-        const yoffsetHealth = this.lv === 3 ? 50 : 15;
+        const xoffsetHealth = 0;
+        const yoffsetHealth = 15;
         c.fillStyle = 'red';
         c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, this.width, 10);
 
