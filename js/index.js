@@ -20,11 +20,13 @@ const mouse = {
 }
 const priceTower = 50;
 let activeTile = undefined;
+let activeTileShopping = undefined;
 let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
+let isShoping = false;
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
@@ -216,22 +218,59 @@ function sound(soundSrc) {
 }
 
 canvas.addEventListener('click', (event) => {
-    if (activeTile && !activeTile.isOccupied && coins - priceTower >= 0) {
-        // new building
-        coins -= priceTower;
-        const building = new Building({
-            position: {
-                x: activeTile.position.x,
-                y: activeTile.position.y
-            },
-            scale: 0.5
-        });
-        buildings.push(building);
-        activeTile.building = building;
-        activeTile.isOccupied = true;
-        buildings.sort((a, b) => {
-            return a.position.y - b.position.y
-        });
+    if (activeTile && !activeTile.displayShop && !isShoping) {
+        activeTile.displayShop = true;
+        isShoping = true;
+        activeTileShopping = activeTile;
+    } else if (activeTile && activeTile.displayShop) {
+        activeTile.displayShop = false;
+        isShoping = false;
+        activeTileShopping = undefined;
+    } else if (activeTileShopping && !activeTileShopping.isOccupied) {
+        if (event.clientX > activeTileShopping.shop.slot1.position.x && event.clientX < activeTileShopping.shop.slot1.position.x + activeTileShopping.shop.slot1.width &&
+            event.clientY > activeTileShopping.shop.slot1.position.y && event.clientY < activeTileShopping.shop.slot1.position.y + activeTileShopping.shop.slot1.height) {
+            if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
+                // new building
+                coins -= priceTower;
+                const building = new Building({
+                    position: {
+                        x: activeTileShopping.position.x,
+                        y: activeTileShopping.position.y
+                    },
+                    scale: 0.5
+                });
+                buildings.push(building);
+                activeTileShopping.building = building;
+                activeTileShopping.isOccupied = true;
+                buildings.sort((a, b) => {
+                    return a.position.y - b.position.y
+                });
+                activeTileShopping.displayShop = false;
+                isShoping = false;
+                activeTileShopping = undefined;
+            }
+        }
+    } else if (activeTileShopping && activeTileShopping.isOccupied) {
+        if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
+            event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
+                coins += 30;
+                for (let index = 0; index < buildings.length; index++) {
+                    const building = buildings[index];
+                    if (building.position.x === activeTileShopping.building.position.x &&
+                        building.position.y === activeTileShopping.building.position.y) {
+                            buildings.splice(index, 1);
+                            break;
+                    }
+                }
+                activeTileShopping.building = undefined;
+                activeTileShopping.isOccupied = false;
+                buildings.sort((a, b) => {
+                    return a.position.y - b.position.y
+                });
+                activeTileShopping.displayShop = false;
+                isShoping = false;
+                activeTileShopping = undefined;
+        }
     }
 });
 

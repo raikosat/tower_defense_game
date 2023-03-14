@@ -57,7 +57,7 @@ class Building extends Sprite {
         this.projectiles.push(
             new Projecttile({
                 position: {
-                    x: this.center.x - 40,
+                    x: this.center.x - 10,
                     y: this.center.y - 50
                 },
                 enemy: this.target,
