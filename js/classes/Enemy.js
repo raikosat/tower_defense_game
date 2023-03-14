@@ -8,8 +8,8 @@ class Enemy extends Sprite {
             offset: offset
         });
         this.position = position;
-        this.width = 100;
-        this.height = 100;
+        this.width = 74;
+        this.height = 55;
         this.waypointIndex = 0;
         this.center = {
             x: this.position.x + (this.width / 2),
