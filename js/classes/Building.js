@@ -54,7 +54,6 @@ class Building extends Sprite {
         setTimeout(() => {
             sound.remove();
         }, 500);
-        console.log('shoot');
         this.projectiles.push(
             new Projecttile({
                 position: {
