@@ -14,8 +14,17 @@ class Sprite {
     }
 
     draw() {
-        c.strokeStyle = 'white';
-        c.strokeRect(this.position.x, this.position.y, this.image.width / this.frames.max, this.image.height);
+        // const width = this.image.width / this.frames.max * this.scale;
+        // const height = this.image.height * this.scale;
+        // console.log(width, height);
+        // console.log(this.width, this.height);
+        // c.strokeStyle = 'white';
+        // c.strokeRect(this.position.x, this.position.y, width, height);
+
+        // c.fillStyle = 'red';
+        // c.beginPath();
+        // c.arc(this.position.x + (this.width / 2), this.position.y + (this.height / 2), 10, 0, 2 * Math.PI);
+        // c.stroke();
 
         const cropWidth = this.image.width / this.frames.max;
         const crop = {

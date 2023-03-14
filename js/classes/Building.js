@@ -13,7 +13,7 @@ class Building extends Sprite {
             },
             scale: scale
         });
-        this.width = 64 * 2;
+        this.width = 64;
         this.height = 64;
         this.center = {
             x: this.position.x + this.width / 2,
