@@ -24,7 +24,7 @@ let activeTileShopping = undefined;
 let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
-let hearts = 1;
+let hearts = 10;
 let coins = 250;
 let isShoping = false;
 
@@ -148,7 +148,6 @@ function animate() {
     // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
-        enemyDie.draw();
         enemyDie.update();
 
         if (enemyDie.frames.current >= enemyDie.frames.max - 1) {
