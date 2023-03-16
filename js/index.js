@@ -24,7 +24,7 @@ let activeTileShopping = undefined;
 let wave = 1;
 let waves = rounds;
 let enemyCount = 3;
-let hearts = 10;
+let hearts = 1;
 let coins = 250;
 let isShoping = false;
 
@@ -92,23 +92,26 @@ function spawnEnemies() {
     const round = waves[wave - 1];
     const enemiesRound = round.enemies;
 
-    let count = 1;
     for (let k = 0; k < enemiesRound.length; k++) {
         const enemiesDetails = enemiesRound[k];
+        let xOffset = 0;
         for (let i = 1; i < enemiesDetails.count + 1; i++) {
-            const xOffset = count * 100;
-            count++;
+            if (i == 1) {
+                xOffset = 500;
+            } else {
+                xOffset += 100;
+            }
             this.createEnemy(xOffset);
         }
     }
 }
 
 function showWave() {
-    document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
     document.querySelector('#wave').style.display = 'flex';
+    document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
     setTimeout(() => {
         document.querySelector('#wave').style.display = 'none';
-    }, 1000);
+    }, 3000);
 }
 
 function animate() {
@@ -117,21 +120,21 @@ function animate() {
     this.drawHeart();
     this.drawCoin();
 
+    // enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
         enemy.update();
         if (enemy.position.x > canvas.width) {
             hearts -= 1;
             enemies.splice(i, 1);
-            // document.querySelector('#hearts').innerHTML = hearts;
-
-            if (hearts === 0) {
+            if (hearts <= 0) {
                 cancelAnimationFrame(animationId);
                 document.querySelector('#gameOver').style.display = 'flex';
             }
         }
     }
 
+    // animation explosions
     for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i];
         explosion.draw();
@@ -142,6 +145,7 @@ function animate() {
         }
     }
 
+    // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
         enemyDie.draw();
@@ -172,7 +176,7 @@ function animate() {
             const xDifference = enemy.center.x - building.center.x;
             const yDifference = enemy.center.y - building.center.y;
             const distance = Math.hypot(xDifference, yDifference);
-            return distance < enemy.radius + building.radius;
+            return (distance < enemy.radius + building.radius && enemy.position.x > 0 &&  enemy.position.y > 0);
         });
         building.target = validEnemies[0];
 
