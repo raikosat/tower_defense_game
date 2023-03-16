@@ -20,7 +20,7 @@ class Building extends Sprite {
             y: this.position.y + this.height / 2
         }
         this.projectiles = [];
-        this.radius = 250;
+        this.radius = 180;
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = 10;
@@ -36,6 +36,10 @@ class Building extends Sprite {
     }
 
     update(speedGame) {
+        // c.beginPath();
+        // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
+        // c.stroke();
+
         this.draw();
         if (this.target || !this.target && this.frames.current !== 0) super.update(speedGame);
         if (this.target && this.frames.current === 6 && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
