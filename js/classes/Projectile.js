@@ -9,7 +9,7 @@ class Projecttile extends Sprite {
         this.radius = 10;
     }
 
-    update() {
+    update(speedGame) {
         this.draw();
         const angle = Math.atan2(
             this.enemy.center.y - this.position.y,
@@ -20,7 +20,7 @@ class Projecttile extends Sprite {
         this.velocity.x = Math.cos(angle) * power;
         this.velocity.y = Math.sin(angle) * power;
 
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        this.position.x += this.velocity.x * speedGame;
+        this.position.y += this.velocity.y * speedGame;
     }
 }

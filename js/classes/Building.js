@@ -35,10 +35,10 @@ class Building extends Sprite {
         super.draw();
     }
 
-    update() {
+    update(speedGame) {
         this.draw();
-        if (this.target || !this.target && this.frames.current !== 0) super.update();
-        if (this.target && this.frames.current === 6 && this.frames.elapsed % this.frames.hold === 0) this.shoot();
+        if (this.target || !this.target && this.frames.current !== 0) super.update(speedGame);
+        if (this.target && this.frames.current === 6 && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
     }
 
     shoot() {

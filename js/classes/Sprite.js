@@ -48,10 +48,10 @@ class Sprite {
         );
     }
 
-    update() {
+    update(speedGame) {
         // reponsible for animation
         this.frames.elapsed++;
-        if (this.frames.elapsed % this.frames.hold === 0) {
+        if (this.frames.elapsed % (this.frames.hold / speedGame) === 0) {
             this.frames.current++;
             if (this.frames.current >= this.frames.max) {
                 this.frames.current = 0;

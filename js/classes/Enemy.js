@@ -32,17 +32,17 @@ class Enemy extends Sprite {
         this.drawHealthBar();
     }
 
-    update() {
+    update(speedGame) {
         this.draw();
-        super.update();
+        super.update(speedGame);
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
         const yDistance = waypoint.y - this.center.y;
         const xDistance = waypoint.x - this.center.x;
         const angle = Math.atan2(yDistance, xDistance);
 
-        this.velocity.x = Math.cos(angle) * this.speed;
-        this.velocity.y = Math.sin(angle) * this.speed;
+        this.velocity.x = (Math.cos(angle) * this.speed) * speedGame;
+        this.velocity.y = (Math.sin(angle) * this.speed) * speedGame;
 
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;

@@ -27,7 +27,7 @@ let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
 let isShoping = false;
-let skipCurrent = 1;
+let speedGame = 1;
 
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
@@ -135,7 +135,7 @@ function animate() {
     // enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
-        enemy.update();
+        enemy.update(speedGame);
         if (enemy.position.x > canvas.width) {
             hearts -= 1;
             enemies.splice(i, 1);
@@ -150,7 +150,7 @@ function animate() {
     for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i];
         explosion.draw();
-        explosion.update();
+        explosion.update(speedGame);
 
         if (explosion.frames.current >= explosion.frames.max - 1) {
             explosions.splice(i, 1);
@@ -160,7 +160,7 @@ function animate() {
     // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
-        enemyDie.update();
+        enemyDie.update(speedGame);
 
         if (enemyDie.frames.current >= enemyDie.frames.max - 1) {
             enemiesDie.splice(i, 1);
@@ -179,7 +179,7 @@ function animate() {
     }
 
     buildings.forEach((building) => {
-        building.update();
+        building.update(speedGame);
         building.target = null;
         const validEnemies = enemies.filter(enemy => {
             const xDifference = enemy.center.x - building.center.x;
@@ -191,7 +191,7 @@ function animate() {
 
         for (let i = building.projectiles.length - 1; i >= 0; i--) {
             const projectile = building.projectiles[i];
-            projectile.update();
+            projectile.update(speedGame);
 
             const xDifference = projectile.enemy.center.x - projectile.position.x;
             const yDifference = projectile.enemy.center.y - projectile.position.y;
@@ -238,7 +238,7 @@ canvas.addEventListener('click', (event) => {
         event.clientX < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
         event.clientY > b_skip.position.y &&
         event.clientY < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
-        skipCurrent = skipCurrent == 1 ? 2: 1;
+        speedGame = speedGame == 1 ? 3: 1;
         this.drawSkip();
     } else if (activeTile && !activeTile.displayShop && !isShoping) {
         activeTile.displayShop = true;
@@ -308,7 +308,6 @@ window.addEventListener('mousemove', (event) => {
             activeTile = tile;
             break;
         }
-
     }
 });
 
@@ -373,7 +372,7 @@ function drawSkip() {
     b_skip.draw();
     c.fillStyle = 'white';
     c.font = "bold 22px Changa One cursive";
-    c.fillText('X' + skipCurrent, canvas.width - 220, 33);
+    c.fillText('X' + speedGame, canvas.width - 220, 33);
 }
 
 function drawLandFlag() {
