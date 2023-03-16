@@ -27,6 +27,7 @@ let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
 let isShoping = false;
+let skipCurrent = 1;
 
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
@@ -38,7 +39,13 @@ const coin = new Sprite({
     position: { x: canvas.width - 180, y: 10 },
     imageSrc: './img/icon/coin.png',
     scale: 0.18
-}); 
+});
+
+const b_skip = new Sprite({
+    position: { x: canvas.width - 270, y: 10 },
+    imageSrc: './img/icon/b_skip.png',
+    scale: 0.35
+});
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
@@ -80,6 +87,7 @@ function startGame() {
     soundBackground();
     this.drawHeart();
     this.drawCoin();
+    this.drawSkip();
     this.drawLandFlag();
     setTimeout(() => {
         spawnEnemies();
@@ -121,6 +129,7 @@ function animate() {
     c.drawImage(image, 0, 0);
     this.drawHeart();
     this.drawCoin();
+    this.drawSkip();
     this.drawLandFlag();
 
     // enemy into end map
@@ -176,7 +185,7 @@ function animate() {
             const xDifference = enemy.center.x - building.center.x;
             const yDifference = enemy.center.y - building.center.y;
             const distance = Math.hypot(xDifference, yDifference);
-            return (distance < enemy.radius + building.radius && enemy.position.x > 0 &&  enemy.position.y > 0);
+            return (distance < enemy.radius + building.radius && enemy.position.x > 0 && enemy.position.y > 0);
         });
         building.target = validEnemies[0];
 
@@ -224,7 +233,14 @@ function sound(soundSrc) {
 }
 
 canvas.addEventListener('click', (event) => {
-    if (activeTile && !activeTile.displayShop && !isShoping) {
+    //click skip
+    if (event.clientX > b_skip.position.x &&
+        event.clientX < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
+        event.clientY > b_skip.position.y &&
+        event.clientY < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
+        skipCurrent = skipCurrent == 1 ? 2: 1;
+        this.drawSkip();
+    } else if (activeTile && !activeTile.displayShop && !isShoping) {
         activeTile.displayShop = true;
         isShoping = true;
         activeTileShopping = activeTile;
@@ -259,23 +275,23 @@ canvas.addEventListener('click', (event) => {
     } else if (activeTileShopping && activeTileShopping.isOccupied) {
         if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
             event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
-                coins += 30;
-                for (let index = 0; index < buildings.length; index++) {
-                    const building = buildings[index];
-                    if (building.position.x === activeTileShopping.building.position.x &&
-                        building.position.y === activeTileShopping.building.position.y) {
-                            buildings.splice(index, 1);
-                            break;
-                    }
+            coins += 30;
+            for (let index = 0; index < buildings.length; index++) {
+                const building = buildings[index];
+                if (building.position.x === activeTileShopping.building.position.x &&
+                    building.position.y === activeTileShopping.building.position.y) {
+                    buildings.splice(index, 1);
+                    break;
                 }
-                activeTileShopping.building = undefined;
-                activeTileShopping.isOccupied = false;
-                buildings.sort((a, b) => {
-                    return a.position.y - b.position.y
-                });
-                activeTileShopping.displayShop = false;
-                isShoping = false;
-                activeTileShopping = undefined;
+            }
+            activeTileShopping.building = undefined;
+            activeTileShopping.isOccupied = false;
+            buildings.sort((a, b) => {
+                return a.position.y - b.position.y
+            });
+            activeTileShopping.displayShop = false;
+            isShoping = false;
+            activeTileShopping = undefined;
         }
     }
 });
@@ -351,6 +367,13 @@ function drawCoin() {
     c.fillStyle = 'white';
     c.font = "bold 24px Changa One cursive";
     c.fillText(coins, canvas.width - 140, 35);
+}
+
+function drawSkip() {
+    b_skip.draw();
+    c.fillStyle = 'white';
+    c.font = "bold 22px Changa One cursive";
+    c.fillText('X' + skipCurrent, canvas.width - 220, 33);
 }
 
 function drawLandFlag() {
