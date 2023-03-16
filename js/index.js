@@ -97,9 +97,11 @@ function spawnEnemies() {
         let xOffset = 0;
         for (let i = 1; i < enemiesDetails.count + 1; i++) {
             if (i == 1) {
-                xOffset = 500;
+                xOffset = 100;
+            } else if (i % 6 == 0) {
+                xOffset += 200;
             } else {
-                xOffset += 100;
+                xOffset += 40;
             }
             this.createEnemy(xOffset);
         }
@@ -119,6 +121,7 @@ function animate() {
     c.drawImage(image, 0, 0);
     this.drawHeart();
     this.drawCoin();
+    this.drawLandFlag();
 
     // enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
@@ -165,8 +168,6 @@ function animate() {
             document.querySelector('#gameOver').style.display = 'flex';
         }
     }
-
-    this.drawLandFlag();
 
     buildings.forEach((building) => {
         building.update();
@@ -296,10 +297,11 @@ window.addEventListener('mousemove', (event) => {
 });
 
 function createEnemy(xOffset) {
+    const wp = this.randomWaypoints();
     enemies.push(new Enemy({
         position: {
-            x: waypoints[0].x - xOffset,
-            y: waypoints[0].y
+            x: wp[0].x - xOffset,
+            y: wp[0].y
         },
         health: 100,
         healthMax: 100,
@@ -307,7 +309,8 @@ function createEnemy(xOffset) {
         framesMax: 7,
         scale: 0.7,
         offset: { x: 0, y: 0 },
-        speed: 1
+        speed: 0.8,
+        waypoints: wp
     }));
 }
 
@@ -354,4 +357,15 @@ function drawLandFlag() {
     placementTiles.forEach((tile) => {
         tile.update(mouse);
     });
+}
+
+function randomWaypoints() {
+    const rdIndex = Math.floor((Math.random() * 11));
+    if (rdIndex > 6) {
+        return waypoints1_map1;
+    } else if (rdIndex > 3) {
+        return waypoints2_map1;
+    } else {
+        return waypoints3_map1;
+    }
 }

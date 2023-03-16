@@ -1,5 +1,5 @@
 rounds = [
-    { wave: 1, enemies: [{ lv: 1, count: 5 }] }, // 5
+    { wave: 1, enemies: [{ lv: 1, count: 17 }] }, // 5
     { wave: 2, enemies: [{ lv: 1, count: 10 }] }, // 10
     { wave: 3, enemies: [{ lv: 1, count: 15 }, { lv: 2, count: 1 }] }, // 16
     { wave: 4, enemies: [{ lv: 1, count: 6 }, { lv: 2, count: 4 }, { lv: 1, count: 6 }] }, // 16
