@@ -95,11 +95,11 @@ function spawnEnemies() {
     for (let k = 0; k < enemiesRound.length; k++) {
         const enemiesDetails = enemiesRound[k];
         let xOffset = 0;
-        for (let i = 1; i < enemiesDetails.count + 1; i++) {
-            if (i == 1) {
+        for (let i = 0; i < enemiesDetails.count; i++) {
+            if (i == 0) {
                 xOffset = 100;
             } else if (i % 6 == 0) {
-                xOffset += 200;
+                xOffset += 800;
             } else {
                 xOffset += 40;
             }
