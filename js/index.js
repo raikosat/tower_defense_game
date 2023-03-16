@@ -13,7 +13,7 @@ const explosions = [];
 const enemies = [];
 const enemiesDie = [];
 const image = new Image();
-image.src = './img/gameMap.png';
+image.src = './img/map/gameMap.png';
 const mouse = {
     x: undefined,
     y: undefined
@@ -27,6 +27,18 @@ let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
 let isShoping = false;
+
+const heart = new Sprite({
+    position: { x: canvas.width - 90, y: 15 },
+    imageSrc: './img/icon/heart.png',
+    scale: 0.1
+});
+
+const coin = new Sprite({
+    position: { x: canvas.width - 180, y: 10 },
+    imageSrc: './img/icon/coin.png',
+    scale: 0.18
+}); 
 
 for (let i = 0; i < placementTilesData.length; i += 20) {
     placementTilesData2D.push(placementTilesData.slice(i, i + 20));
@@ -64,10 +76,15 @@ image.onload = () => {
 }
 
 function startGame() {
-    soundBackground();
-    spawnEnemies();
-    animate();
     document.querySelector('#startGame').style.display = 'none';
+    soundBackground();
+    this.drawHeart();
+    this.drawCoin();
+    this.drawLandFlag();
+    setTimeout(() => {
+        spawnEnemies();
+        animate();
+    }, 1000);
 }
 
 function spawnEnemies() {
@@ -81,20 +98,7 @@ function spawnEnemies() {
         for (let i = 1; i < enemiesDetails.count + 1; i++) {
             const xOffset = count * 100;
             count++;
-            enemies.push(new Enemy({
-                position: {
-                    x: waypoints[0].x - xOffset,
-                    y: waypoints[0].y
-                },
-                health: 100,
-                healthMax: 100,
-                imageSrc: 'img/orc.png',
-                framesMax: 7,
-                scale: 0.7,
-                offset: { x: 0, y: 0 },
-                speed: 1
-            }));
-
+            this.createEnemy(xOffset);
         }
     }
 }
@@ -104,13 +108,14 @@ function showWave() {
     document.querySelector('#wave').style.display = 'flex';
     setTimeout(() => {
         document.querySelector('#wave').style.display = 'none';
-    }, 1000)
+    }, 1000);
 }
 
 function animate() {
     const animationId = requestAnimationFrame(animate);
     c.drawImage(image, 0, 0);
-    document.querySelector('#coins').innerHTML = coins;
+    this.drawHeart();
+    this.drawCoin();
 
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
@@ -118,7 +123,7 @@ function animate() {
         if (enemy.position.x > canvas.width) {
             hearts -= 1;
             enemies.splice(i, 1);
-            document.querySelector('#hearts').innerHTML = hearts;
+            // document.querySelector('#hearts').innerHTML = hearts;
 
             if (hearts === 0) {
                 cancelAnimationFrame(animationId);
@@ -158,9 +163,7 @@ function animate() {
         }
     }
 
-    placementTiles.forEach((tile) => {
-        tile.update(mouse);
-    });
+    this.drawLandFlag();
 
     buildings.forEach((building) => {
         building.update();
@@ -194,7 +197,6 @@ function animate() {
 
                         enemies.splice(enemyIndex, 1);
                         coins += projectile.enemy.bounes;
-                        document.querySelector('#coins').innerHTML = coins;
                     };
                 }
                 this.createExplosions(projectile);
@@ -290,6 +292,22 @@ window.addEventListener('mousemove', (event) => {
     }
 });
 
+function createEnemy(xOffset) {
+    enemies.push(new Enemy({
+        position: {
+            x: waypoints[0].x - xOffset,
+            y: waypoints[0].y
+        },
+        health: 100,
+        healthMax: 100,
+        imageSrc: 'img/characters/orc.png',
+        framesMax: 7,
+        scale: 0.7,
+        offset: { x: 0, y: 0 },
+        speed: 1
+    }));
+}
+
 function createEnemyDie(projectile) {
     sound('./sound/orc-death.mp3');
     enemiesDie.push(new Enemy({
@@ -299,7 +317,7 @@ function createEnemyDie(projectile) {
         },
         health: 0,
         healthMax: 100,
-        imageSrc: 'img/orcdie.png',
+        imageSrc: 'img/characters/orcdie.png',
         framesMax: 7,
         scale: 0.7
     }));
@@ -308,9 +326,29 @@ function createEnemyDie(projectile) {
 function createExplosions(projectile) {
     explosions.push(new Sprite({
         position: { x: projectile.position.x, y: projectile.position.y },
-        imageSrc: './img/explosion.png',
+        imageSrc: './img/buildings/explosion.png',
         frames: { max: 4 },
         offset: { x: 0, y: 0 },
         scale: 0.5
     }));
+}
+
+function drawHeart() {
+    heart.draw();
+    c.fillStyle = 'white';
+    c.font = "bold 24px Changa One cursive";
+    c.fillText(hearts, canvas.width - 50, 35);
+}
+
+function drawCoin() {
+    coin.draw();
+    c.fillStyle = 'white';
+    c.font = "bold 24px Changa One cursive";
+    c.fillText(coins, canvas.width - 140, 35);
+}
+
+function drawLandFlag() {
+    placementTiles.forEach((tile) => {
+        tile.update(mouse);
+    });
 }

@@ -1,6 +1,6 @@
 class Projecttile extends Sprite {
     constructor({ position = { x: 0, y: 0 }, enemy, scale }) {
-        super({ position, imageSrc: 'img/projectile.png' , scale});
+        super({ position, imageSrc: 'img/buildings/projectile.png' , scale});
         this.velocity = {
             x: 0,
             y: 0

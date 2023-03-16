@@ -61,7 +61,7 @@ class Enemy extends Sprite {
     drawHealthBar() {
         const widthHealth = this.width * this.scale;
         // health bar
-        const xoffsetHealth = 0;
+        const xoffsetHealth = 5;
         const yoffsetHealth = 15;
         c.fillStyle = 'red';
         c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, widthHealth, 5);
