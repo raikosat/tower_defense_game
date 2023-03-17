@@ -20,15 +20,11 @@ class Building extends Sprite {
             y: this.position.y + this.height / 2
         }
         this.projectiles = [];
-        this.radius = 180;
+        this.radius = 200;
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = 10;
         this.shop = false;
-        this.xShop = this.center.x - 50;
-        this.yShop = this.center.y - 240;
-        this.wShop = 80;
-        this.hShop = 80;
     }
 
     draw() {

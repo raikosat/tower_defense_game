@@ -1,7 +1,9 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100, imageSrc, framesMax, scale, offset, speed = 1 , waypoints}) {
+    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100, imageSrc, framesMax, scale, offset, speed = 1 , waypoints, monster}) {
         super({
-            position, imageSrc: imageSrc, frames: {
+            position,
+            imageSrc: imageSrc,
+            frames: {
                 max: framesMax
             },
             scale: scale,
@@ -25,6 +27,7 @@ class Enemy extends Sprite {
         this.bounes = 5;
         this.speed = speed;
         this.waypoints = waypoints;
+        this.monster = monster;
     }
 
     draw() {

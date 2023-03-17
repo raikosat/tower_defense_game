@@ -313,19 +313,21 @@ window.addEventListener('mousemove', (event) => {
 
 function createEnemy(xOffset) {
     const wp = this.randomWaypoints();
+    const monster = ocr1;
     enemies.push(new Enemy({
         position: {
             x: wp[0].x - xOffset,
             y: wp[0].y
         },
-        health: 100,
-        healthMax: 100,
-        imageSrc: 'img/characters/orc.png',
-        framesMax: 7,
-        scale: 0.7,
+        health: monster.health,
+        healthMax: monster.health,
+        imageSrc: monster.walk.imageSrc,
+        framesMax: monster.walk.framesMax,
+        scale: monster.walk.scale,
         offset: { x: 0, y: 0 },
-        speed: 0.8,
-        waypoints: wp
+        speed: monster.speed,
+        waypoints: wp,
+        monster: monster
     }));
 }
 
@@ -337,10 +339,10 @@ function createEnemyDie(projectile) {
             y: projectile.enemy.position.y
         },
         health: 0,
-        healthMax: 100,
-        imageSrc: 'img/characters/orcdie.png',
-        framesMax: 7,
-        scale: 0.7
+        healthMax: projectile.enemy.monster.health,
+        imageSrc: projectile.enemy.monster.die.imageDeathSrc,
+        framesMax: projectile.enemy.monster.die.framesMax,
+        scale: projectile.enemy.monster.die.scale
     }));
 }
 
