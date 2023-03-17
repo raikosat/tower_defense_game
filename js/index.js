@@ -371,12 +371,14 @@ function checkBuyBuilding(event, activeTileShopping) {
         if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
             // buy new building
             coins -= priceTower;
+            const tower = tower1;
             const building = new Building({
                 position: {
                     x: activeTileShopping.position.x,
                     y: activeTileShopping.position.y
                 },
-                scale: 0.5
+                scale: tower.scale,
+                tower: tower
             });
             buildings.push(building);
             activeTileShopping.building = building;

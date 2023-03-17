@@ -1,15 +1,15 @@
 class Building extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, scale }) {
+    constructor({ position = { x: 0, y: 0 }, scale, tower }) {
         super({
             position,
-            imageSrc: 'img/buildings/tower.png',
+            imageSrc: tower.imageSrc,
             frames: {
-                max: 19,
+                max: tower.framsMax,
 
             },
             offset: {
-                x: 2,
-                y: -20
+                x: tower.offset.x,
+                y: tower.offset.y
             },
             scale: scale
         });
@@ -20,11 +20,12 @@ class Building extends Sprite {
             y: this.position.y + this.height / 2
         }
         this.projectiles = [];
-        this.radius = 200;
+        this.radius = tower.radius;
         this.target;
         this.elapsedSpawnTime = 0;
-        this.damage = 10;
+        this.damage = tower.damage;
         this.shop = false;
+        this.frameShoot = tower.frameShoot;
     }
 
     draw() {
@@ -38,7 +39,7 @@ class Building extends Sprite {
 
         this.draw();
         if (this.target || !this.target && this.frames.current !== 0) super.update(speedGame);
-        if (this.target && this.frames.current === 6 && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
+        if (this.target && this.frames.current === this.frameShoot && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
     }
 
     shoot() {

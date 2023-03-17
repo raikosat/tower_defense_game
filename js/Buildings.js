@@ -1,0 +1,1 @@
+const tower1 = {imageSrc: 'img/buildings/tower.png', scale: 0.5, framsMax: 19, offset: {x: 2,y: -20}, radius: 200, damage: 10, frameShoot: 6};
