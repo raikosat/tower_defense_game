@@ -22,7 +22,6 @@ const priceTower = 50;
 let activeTile = undefined;
 let activeTileShopping = undefined;
 let wave = 1;
-let waves = rounds;
 let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
@@ -97,11 +96,12 @@ function startGame() {
 
 function spawnEnemies() {
     showWave();
-    const round = waves[wave - 1];
-    const enemiesRound = round.enemies;
+    const turn = wavesMap1[wave - 1];
+    const enemiesTurn = turn.enemies;
 
-    for (let k = 0; k < enemiesRound.length; k++) {
-        const enemiesDetails = enemiesRound[k];
+    for (let k = 0; k < enemiesTurn.length; k++) {
+        const enemiesDetails = enemiesTurn[k];
+        const monster = enemiesDetails.monster;
         let xOffset = 0;
         for (let i = 0; i < enemiesDetails.count; i++) {
             if (i == 0) {
@@ -111,7 +111,7 @@ function spawnEnemies() {
             } else {
                 xOffset += 40;
             }
-            this.createEnemy(xOffset);
+            this.createEnemy(xOffset, monster);
         }
     }
 }
@@ -311,9 +311,8 @@ window.addEventListener('mousemove', (event) => {
     }
 });
 
-function createEnemy(xOffset) {
+function createEnemy(xOffset, monster) {
     const wp = this.randomWaypoints();
-    const monster = ocr1;
     enemies.push(new Enemy({
         position: {
             x: wp[0].x - xOffset,
