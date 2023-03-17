@@ -270,24 +270,34 @@ window.addEventListener('mousemove', (event) => {
     mouse.x = event.clientX;
     mouse.y = event.clientY;
 
+    if (mouse.x > b_skip.position.x && mouse.x < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
+        mouse.y > b_skip.position.y && mouse.y < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
+        b_skip.image.src = './img/icon/b_skip_selected.png';
+    } else {
+        b_skip.image.src = './img/icon/b_skip.png';
+    }
+
     activeTile = null;
     for (let i = 0; i < placementTiles.length; i++) {
         const tile = placementTiles[i];
         if (mouse.x > tile.position.x && mouse.x < tile.position.x + tile.size &&
-            mouse.y > tile.position.y && mouse.y < tile.position.y + tile.size) {
+            mouse.y > tile.position.y && mouse.y < tile.position.y + tile.size &&
+            !tile.isOccupied) {
             activeTile = tile;
-            activeTile.hover = true;
+            tile.hover = true;
             break;
         } else {
             tile.hover = false;
         }
-    }
-    if (mouse.x > b_skip.position.x && mouse.x < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
-        mouse.y > b_skip.position.y && mouse.y < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
-        b_skip.image.src = './img/icon/b_skip_selected.png';
-        console.log('b_skip_selected');
-    } else {
-        b_skip.image.src = './img/icon/b_skip.png';
+        if (mouse.x > tile.position.x && mouse.x < tile.position.x + tile.size &&
+            mouse.y > tile.position.y && mouse.y < tile.position.y + tile.size &&
+            tile.isOccupied) {
+            activeTile = tile;
+            activeTile.building.image.src = activeTile.building.tower.image_selected;
+            break;
+        } else if (tile.isOccupied)  {
+            tile.building.image.src = tile.building.tower.imageSrc;
+        }
     }
 });
 

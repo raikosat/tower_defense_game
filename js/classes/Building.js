@@ -27,6 +27,7 @@ class Building extends Sprite {
         this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: 'img/store/shop1.png'});
         this.displayShop = false;
         this.frameShoot = tower.frameShoot;
+        this.tower = tower;
     }
 
     draw() {
