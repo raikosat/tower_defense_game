@@ -24,12 +24,16 @@ class Building extends Sprite {
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = tower.damage;
-        this.shop = false;
+        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: 'img/store/shop1.png'});
+        this.displayShop = false;
         this.frameShoot = tower.frameShoot;
     }
 
     draw() {
         super.draw();
+        if (this.displayShop) {
+            this.shop.update();
+        } 
     }
 
     update(speedGame) {

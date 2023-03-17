@@ -60,7 +60,11 @@ placementTilesData2D.forEach((row, y) => {
                     position: {
                         x: x * 64,
                         y: y * 64
-                    }
+                    },
+                    tw1: tower1,
+                    tw2: undefined,
+                    tw3: undefined,
+                    tw4: undefined
                 })
             )
         }
@@ -241,12 +245,18 @@ canvas.addEventListener('click', (event) => {
         event.clientY < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
         speedGame = (speedGame == 1 ? speedMaxGame : 1);
         this.drawSkip();
-    } else if (activeTile && !activeTile.displayShop && !isShoping) {
+    } else if (activeTile && !activeTile.displayShop && !activeTile.isOccupied && !isShoping) {
         // handle display shop of land
         this.openShopOfLand(activeTile);
-    } else if (activeTile && activeTile.displayShop) {
+    } else if (activeTile && activeTile.displayShop && !activeTile.isOccupied && isShoping) {
         // handle close shop of land
         this.closeShopOfLand(activeTile);
+    } else if (activeTile && activeTile.isOccupied && !activeTile.building.displayShop && !isShoping) {
+        // handle display shop of building
+        this.openShopOfBuilding(activeTile);
+    } else if (activeTile && activeTile.isOccupied && activeTile.building.displayShop && isShoping) {
+        // handle close shop of building
+        this.closeShopOfBuilding(activeTile);
     } else if (activeTileShopping && !activeTileShopping.isOccupied) {
         // handle buy building in shop of building
         this.checkBuyBuilding(event, activeTileShopping);
@@ -365,13 +375,25 @@ function closeShopOfLand(activeTile) {
     activeTileShopping = undefined;
 }
 
+function openShopOfBuilding(activeTile) {
+    activeTile.building.displayShop = true;
+    isShoping = true;
+    activeTileShopping = activeTile;
+}
+
+function closeShopOfBuilding(activeTile) {
+    activeTile.building.displayShop = false;
+    isShoping = false;
+    activeTileShopping = undefined;
+}
+
 function checkBuyBuilding(event, activeTileShopping) {
     if (event.clientX > activeTileShopping.shop.slot1.position.x && event.clientX < activeTileShopping.shop.slot1.position.x + activeTileShopping.shop.slot1.width &&
         event.clientY > activeTileShopping.shop.slot1.position.y && event.clientY < activeTileShopping.shop.slot1.position.y + activeTileShopping.shop.slot1.height) {
         if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
             // buy new building
             coins -= priceTower;
-            const tower = tower1;
+            const tower = activeTileShopping.shop.slot1.tower;
             const building = new Building({
                 position: {
                     x: activeTileShopping.position.x,
@@ -386,16 +408,15 @@ function checkBuyBuilding(event, activeTileShopping) {
             buildings.sort((a, b) => {
                 return a.position.y - b.position.y
             });
-            activeTileShopping.displayShop = false;
-            isShoping = false;
-            activeTileShopping = undefined;
+            this.closeShopOfLand(activeTileShopping);
         }
     }
 }
 
 function checkUpgradeBuilding(event, activeTileShopping) {
-    if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
-        event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
+    // detroy building
+    if (event.clientX > activeTileShopping.building.shop.slot3.position.x && event.clientX < activeTileShopping.building.shop.slot3.position.x + activeTileShopping.building.shop.slot3.width &&
+        event.clientY > activeTileShopping.building.shop.slot3.position.y && event.clientY < activeTileShopping.building.shop.slot3.position.y + activeTileShopping.building.shop.slot3.height) {
         coins += 30;
         for (let index = 0; index < buildings.length; index++) {
             const building = buildings[index];
