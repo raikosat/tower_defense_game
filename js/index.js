@@ -18,7 +18,7 @@ const mouse = {
     x: undefined,
     y: undefined
 }
-const priceTower = 50;
+const priceTower = 70;
 let activeTile = undefined;
 let activeTileShopping = undefined;
 let wave = 1;
@@ -27,6 +27,7 @@ let hearts = 10;
 let coins = 250;
 let isShoping = false;
 let speedGame = 1;
+let speedMaxGame = 3;
 
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
@@ -233,66 +234,25 @@ function sound(soundSrc) {
 }
 
 canvas.addEventListener('click', (event) => {
-    //click skip
+    //click skip button
     if (event.clientX > b_skip.position.x &&
         event.clientX < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
         event.clientY > b_skip.position.y &&
         event.clientY < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
-        speedGame = speedGame == 1 ? 3: 1;
+        speedGame = (speedGame == 1 ? speedMaxGame : 1);
         this.drawSkip();
     } else if (activeTile && !activeTile.displayShop && !isShoping) {
-        activeTile.displayShop = true;
-        isShoping = true;
-        activeTileShopping = activeTile;
+        // handle display shop of land
+        this.openShopOfLand(activeTile);
     } else if (activeTile && activeTile.displayShop) {
-        activeTile.displayShop = false;
-        isShoping = false;
-        activeTileShopping = undefined;
+        // handle close shop of land
+        this.closeShopOfLand(activeTile);
     } else if (activeTileShopping && !activeTileShopping.isOccupied) {
-        if (event.clientX > activeTileShopping.shop.slot1.position.x && event.clientX < activeTileShopping.shop.slot1.position.x + activeTileShopping.shop.slot1.width &&
-            event.clientY > activeTileShopping.shop.slot1.position.y && event.clientY < activeTileShopping.shop.slot1.position.y + activeTileShopping.shop.slot1.height) {
-            if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
-                // new building
-                coins -= priceTower;
-                const building = new Building({
-                    position: {
-                        x: activeTileShopping.position.x,
-                        y: activeTileShopping.position.y
-                    },
-                    scale: 0.5
-                });
-                buildings.push(building);
-                activeTileShopping.building = building;
-                activeTileShopping.isOccupied = true;
-                buildings.sort((a, b) => {
-                    return a.position.y - b.position.y
-                });
-                activeTileShopping.displayShop = false;
-                isShoping = false;
-                activeTileShopping = undefined;
-            }
-        }
+        // handle buy building in shop of building
+        this.checkBuyBuilding(event, activeTileShopping);
     } else if (activeTileShopping && activeTileShopping.isOccupied) {
-        if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
-            event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
-            coins += 30;
-            for (let index = 0; index < buildings.length; index++) {
-                const building = buildings[index];
-                if (building.position.x === activeTileShopping.building.position.x &&
-                    building.position.y === activeTileShopping.building.position.y) {
-                    buildings.splice(index, 1);
-                    break;
-                }
-            }
-            activeTileShopping.building = undefined;
-            activeTileShopping.isOccupied = false;
-            buildings.sort((a, b) => {
-                return a.position.y - b.position.y
-            });
-            activeTileShopping.displayShop = false;
-            isShoping = false;
-            activeTileShopping = undefined;
-        }
+        // handle upgrate building
+        this.checkUpgradeBuilding(event, activeTileShopping);
     }
 });
 
@@ -390,5 +350,66 @@ function randomWaypoints() {
         return waypoints2_map1;
     } else {
         return waypoints3_map1;
+    }
+}
+
+function openShopOfLand(activeTile) {
+    activeTile.displayShop = true;
+    isShoping = true;
+    activeTileShopping = activeTile;
+}
+
+function closeShopOfLand(activeTile) {
+    activeTile.displayShop = false;
+    isShoping = false;
+    activeTileShopping = undefined;
+}
+
+function checkBuyBuilding(event, activeTileShopping) {
+    if (event.clientX > activeTileShopping.shop.slot1.position.x && event.clientX < activeTileShopping.shop.slot1.position.x + activeTileShopping.shop.slot1.width &&
+        event.clientY > activeTileShopping.shop.slot1.position.y && event.clientY < activeTileShopping.shop.slot1.position.y + activeTileShopping.shop.slot1.height) {
+        if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
+            // buy new building
+            coins -= priceTower;
+            const building = new Building({
+                position: {
+                    x: activeTileShopping.position.x,
+                    y: activeTileShopping.position.y
+                },
+                scale: 0.5
+            });
+            buildings.push(building);
+            activeTileShopping.building = building;
+            activeTileShopping.isOccupied = true;
+            buildings.sort((a, b) => {
+                return a.position.y - b.position.y
+            });
+            activeTileShopping.displayShop = false;
+            isShoping = false;
+            activeTileShopping = undefined;
+        }
+    }
+}
+
+function checkUpgradeBuilding(event, activeTileShopping) {
+    if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
+        event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
+        coins += 30;
+        for (let index = 0; index < buildings.length; index++) {
+            const building = buildings[index];
+            if (building.position.x === activeTileShopping.building.position.x &&
+                building.position.y === activeTileShopping.building.position.y) {
+                buildings.splice(index, 1);
+                break;
+            }
+        }
+        activeTileShopping.building = undefined;
+        activeTileShopping.isOccupied = false;
+        buildings.sort((a, b) => {
+            return a.position.y - b.position.y
+        });
+        activeTileShopping.displayShop = false;
+        isShoping = false;
+        activeTileShopping = undefined;
     }
 }
