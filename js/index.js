@@ -135,7 +135,6 @@ function animate() {
     this.drawHeart();
     this.drawCoin();
     this.drawSkip();
-    this.drawLandFlag();
 
     // enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
@@ -175,7 +174,7 @@ function animate() {
     // tracking total amount of enemies
     if (enemies.length === 0) {
         wave++;
-        if (wave <= waves.length) {
+        if (wave <= wavesMap1.length) {
             spawnEnemies();
         } else {
             document.querySelector('#gameOver').innerHTML = "WIN";
@@ -183,6 +182,20 @@ function animate() {
         }
     }
 
+    // order display shop of building and shop of land
+    if (activeTile && activeTile.displayShop) {
+        this.animationBuilding();
+        this.drawLandFlag();
+    } else {
+        this.drawLandFlag();
+        this.animationBuilding();
+    }
+}
+
+function animationBuilding() {
+    buildings.sort((a, b) => {
+        return a.displayShop - b.displayShop;
+    });
     buildings.forEach((building) => {
         building.update(speedGame);
         building.target = null;
@@ -367,8 +380,11 @@ function drawSkip() {
 }
 
 function drawLandFlag() {
+    placementTiles.sort((a, b) => {
+        return (a.displayShop - b.displayShop)
+    });
     placementTiles.forEach((tile) => {
-        tile.update(mouse);
+        tile.update();
     });
 }
 

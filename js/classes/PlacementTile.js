@@ -21,12 +21,12 @@ class PlacementTile extends Sprite {
             this.image.src = 'img/buildings/flag_selected.png';
             super.draw();
         }
-        if (this.displayShop && !this.isOccupied) {
-            this.shop.update();
-        } 
     }
 
     update() {
         this.draw();
+        if (this.displayShop && !this.isOccupied) {
+            this.shop.update();
+        } 
     }
 }
