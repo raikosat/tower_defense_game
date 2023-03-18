@@ -302,6 +302,10 @@ window.addEventListener('mousemove', (event) => {
         b_skip.image.src = './img/icon/b_skip.png';
     }
 
+    this.hoverShopOfLand();
+
+    this.hoverShopOfbuilding();
+
     activeTile = null;
     for (let i = 0; i < placementTiles.length; i++) {
         const tile = placementTiles[i];
@@ -524,5 +528,47 @@ function checkUpgradeBuilding(event, activeTileShopping) {
                 break;
             }
         }
+    }
+}
+
+function hoverShopOfLand() {
+    if (activeTileShopping && mouse.x > activeTileShopping.shop.slot1.position.x && mouse.x < activeTileShopping.shop.slot1.position.x + (activeTileShopping.shop.slot1.width) &&
+        mouse.y > activeTileShopping.shop.slot1.position.y && mouse.y < activeTileShopping.shop.slot1.position.y + (activeTileShopping.shop.slot1.height)) {
+        activeTileShopping.shop.slot1Hover = true;
+    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot2.position.x && mouse.x < activeTileShopping.shop.slot2.position.x + (activeTileShopping.shop.slot2.width) &&
+        mouse.y > activeTileShopping.shop.slot2.position.y && mouse.y < activeTileShopping.shop.slot2.position.y + (activeTileShopping.shop.slot2.height)) {
+        activeTileShopping.shop.slot2Hover = true;
+    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot3.position.x && mouse.x < activeTileShopping.shop.slot3.position.x + (activeTileShopping.shop.slot3.width) &&
+        mouse.y > activeTileShopping.shop.slot3.position.y && mouse.y < activeTileShopping.shop.slot3.position.y + (activeTileShopping.shop.slot3.height)) {
+        activeTileShopping.shop.slot3Hover = true;
+    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot4.position.x && mouse.x < activeTileShopping.shop.slot4.position.x + (activeTileShopping.shop.slot4.width) &&
+        mouse.y > activeTileShopping.shop.slot4.position.y && mouse.y < activeTileShopping.shop.slot4.position.y + (activeTileShopping.shop.slot4.height)) {
+        activeTileShopping.shop.slot4Hover = true;
+    } else if (activeTileShopping) {
+        activeTileShopping.shop.slot1Hover = false;
+        activeTileShopping.shop.slot2Hover = false;
+        activeTileShopping.shop.slot3Hover = false;
+        activeTileShopping.shop.slot4Hover = false;
+    }
+}
+
+function hoverShopOfbuilding() {
+    if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot1.position.x && mouse.x < activeTileShopping.building.shop.slot1.position.x + (activeTileShopping.building.shop.slot1.width) &&
+        mouse.y > activeTileShopping.building.shop.slot1.position.y && mouse.y < activeTileShopping.building.shop.slot1.position.y + (activeTileShopping.building.shop.slot1.height)) {
+        activeTileShopping.building.shop.slot1Hover = true;
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot2.position.x && mouse.x < activeTileShopping.building.shop.slot2.position.x + (activeTileShopping.building.shop.slot2.width) &&
+        mouse.y > activeTileShopping.building.shop.slot2.position.y && mouse.y < activeTileShopping.building.shop.slot2.position.y + (activeTileShopping.building.shop.slot2.height)) {
+        activeTileShopping.building.shop.slot2Hover = true;
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot3.position.x && mouse.x < activeTileShopping.building.shop.slot3.position.x + (activeTileShopping.building.shop.slot3.width) &&
+        mouse.y > activeTileShopping.building.shop.slot3.position.y && mouse.y < activeTileShopping.building.shop.slot3.position.y + (activeTileShopping.building.shop.slot3.height)) {
+        activeTileShopping.building.shop.slot3Hover = true;
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot4.position.x && mouse.x < activeTileShopping.building.shop.slot4.position.x + (activeTileShopping.building.shop.slot4.width) &&
+        mouse.y > activeTileShopping.building.shop.slot4.position.y && mouse.y < activeTileShopping.building.shop.slot4.position.y + (activeTileShopping.building.shop.slot4.height)) {
+        activeTileShopping.building.shop.slot4Hover = true;
+    } else if (activeTileShopping && activeTileShopping.building) {
+        activeTileShopping.building.shop.slot1Hover = false;
+        activeTileShopping.building.shop.slot2Hover = false;
+        activeTileShopping.building.shop.slot3Hover = false;
+        activeTileShopping.building.shop.slot4Hover = false;
     }
 }
