@@ -20,8 +20,6 @@ class Sprite {
     draw() {
         // const width = this.width * this.scale;
         // const height = this.height * this.scale;
-        // console.log(width, height);
-        // console.log(this.width, this.height);
         // c.strokeStyle = 'white';
         // c.strokeRect(this.position.x, this.position.y, width, height);
 
