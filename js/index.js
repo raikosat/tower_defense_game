@@ -32,44 +32,56 @@ let speedMaxGame = 3;
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
     imageSrc: './img/icon/heart.png',
-    scale: 0.1
+    scale: 0.1,
+    width: 270,
+    height: 229
 });
 
 const coin = new Sprite({
     position: { x: canvas.width - 180, y: 10 },
     imageSrc: './img/icon/coin.png',
-    scale: 0.18
+    scale: 0.18,
+    width: 160,
+    height: 160
 });
 
 const b_skip = new Sprite({
     position: { x: canvas.width - 270, y: 10 },
     imageSrc: './img/icon/b_skip.png',
-    scale: 0.35
+    scale: 0.35,
+    width: 130,
+    height: 78
 });
 
-for (let i = 0; i < placementTilesData.length; i += 20) {
-    placementTilesData2D.push(placementTilesData.slice(i, i + 20));
+function initPlacementTilesData() {
+    for (let i = 0; i < placementTilesData.length; i += 20) {
+        placementTilesData2D.push(placementTilesData.slice(i, i + 20));
+    }
 }
+initPlacementTilesData();
 
-placementTilesData2D.forEach((row, y) => {
-    row.forEach((symbol, x) => {
-        if (symbol === 14) {
-            // add building placement tile here
-            placementTiles.push(
-                new PlacementTile({
-                    position: {
-                        x: x * 64,
-                        y: y * 64
-                    },
-                    tw1: tower1,
-                    tw2: undefined,
-                    tw3: undefined,
-                    tw4: undefined
-                })
-            )
-        }
+function createPlacementTilesData2D() {
+    placementTilesData2D.forEach((row, y) => {
+        row.forEach((symbol, x) => {
+            if (symbol === 14) {
+                // add building placement tile here
+                placementTiles.push(
+                    new PlacementTile({
+                        position: {
+                            x: x * 64,
+                            y: y * 64
+                        },
+                        tw1: tower1,
+                        tw2: undefined,
+                        tw3: undefined,
+                        tw4: undefined
+                    })
+                )
+            }
+        });
     });
-});
+}
+createPlacementTilesData2D();
 
 function soundBackground() {
     var sound = document.createElement("audio");
@@ -156,7 +168,7 @@ function animate() {
         explosion.draw();
         explosion.update(speedGame);
 
-        if (explosion.frames.current >= explosion.frames.max - 1) {
+        if (explosion.frames.frameX >= explosion.frames.max - 1) {
             explosions.splice(i, 1);
         }
     }
@@ -166,7 +178,7 @@ function animate() {
         const enemyDie = enemiesDie[i];
         enemyDie.update(speedGame);
 
-        if (enemyDie.frames.current >= enemyDie.frames.max - 1) {
+        if (enemyDie.frames.frameX >= enemyDie.frames.max - 1) {
             enemiesDie.splice(i, 1);
         }
     }
@@ -329,7 +341,9 @@ function createEnemy(xOffset, monster) {
         offset: { x: 0, y: 0 },
         speed: monster.speed,
         waypoints: wp,
-        monster: monster
+        monster: monster,
+        width: monster.walk.width,
+        height: monster.walk.height
     }));
 }
 
@@ -344,7 +358,9 @@ function createEnemyDie(projectile) {
         healthMax: projectile.enemy.monster.health,
         imageSrc: projectile.enemy.monster.die.imageDeathSrc,
         framesMax: projectile.enemy.monster.die.framesMax,
-        scale: projectile.enemy.monster.die.scale
+        scale: projectile.enemy.monster.die.scale,
+        width: projectile.enemy.monster.die.width,
+        height: projectile.enemy.monster.die.height
     }));
 }
 
@@ -354,7 +370,9 @@ function createExplosions(projectile) {
         imageSrc: './img/buildings/explosion.png',
         frames: { max: 4 },
         offset: { x: 0, y: 0 },
-        scale: 0.5
+        scale: 0.5,
+        width: 78,
+        height: 84
     }));
 }
 
@@ -437,7 +455,9 @@ function checkBuyBuilding(event, activeTileShopping) {
                 },
                 scale: tower.scale,
                 tower: tower,
-                buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100))
+                buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100)),
+                width: 128,
+                height: 144
             });
             buildings.push(building);
             activeTileShopping.building = building;
@@ -491,7 +511,9 @@ function checkUpgradeBuilding(event, activeTileShopping) {
                     },
                     scale: tower.scale,
                     tower: tower,
-                    buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100))
+                    buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100)),
+                    width: 128,
+                    height: 144
                 });
                 buildings.push(building);
                 activeTileShopping.building = building;

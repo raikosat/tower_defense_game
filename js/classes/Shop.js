@@ -1,8 +1,10 @@
 class Shop extends Sprite {
-    constructor({ position = { x: 0, y: 0 } , imageSrc, tw1, tw2, tw3, tw4}) {
+    constructor({ position = { x: 0, y: 0 } , imageSrc, width, height, tw1, tw2, tw3, tw4}) {
         super({
             position,
-            imageSrc: imageSrc
+            imageSrc: imageSrc,
+            width: width,
+            height: height
         });
         this.position = position;
         this.slot1 = {position: {x: this.position.x, y: this.position.y}, width: 50, height: 50, tower: tw1};

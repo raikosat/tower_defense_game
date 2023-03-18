@@ -1,5 +1,5 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, lv = 1, health = 100, healthMax = 100, imageSrc, framesMax, scale, offset, speed = 1 , waypoints, monster}) {
+    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height}) {
         super({
             position,
             imageSrc: imageSrc,
@@ -7,17 +7,21 @@ class Enemy extends Sprite {
                 max: framesMax
             },
             scale: scale,
-            offset: offset
+            offset: offset,
+            width: width,
+            height: height
         });
         this.position = position;
-        this.width = 74;
-        this.height = 55;
-        this.waypointIndex = 0;
+        this.width = width;
+        this.height = height;
+        this.widthScale = this.width * scale;
+        this.heightScale = this.height * scale;
         this.center = {
-            x: this.position.x + (this.width / 2),
-            y: this.position.y + (this.height / 2)
-        };
-        this.radius = 10;
+            x: this.position.x + this.widthScale / 2,
+            y: this.position.y + this.heightScale / 2
+        }
+        this.waypointIndex = 0;
+        this.radius = 20;
         this.health = health;
         this.healthMax = healthMax;
         this.velocity = {
@@ -38,6 +42,15 @@ class Enemy extends Sprite {
     update(speedGame) {
         this.draw();
         super.update(speedGame);
+
+        // c.strokeStyle = 'black';
+        // c.strokeRect(this.position.x, this.position.y, this.width, this.height);
+
+        // c.beginPath();
+        // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
+        // c.strokeStyle = 'red';
+        // c.stroke();
+        
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
         const yDistance = waypoint.y - this.center.y;
@@ -50,8 +63,8 @@ class Enemy extends Sprite {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
         this.center = {
-            x: this.position.x + (this.width / 2),
-            y: this.position.y + (this.height / 2)
+            x: this.position.x + (this.widthScale / 2),
+            y: this.position.y + (this.heightScale / 2)
         };
 
         if (

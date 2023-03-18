@@ -1,5 +1,5 @@
 class Building extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, scale, tower, buildingId}) {
+    constructor({ position = { x: 0, y: 0 }, scale, tower, buildingId, width, height}) {
         super({
             position,
             imageSrc: tower.imageSrc,
@@ -13,18 +13,20 @@ class Building extends Sprite {
             scale: scale
         });
         this.buildingId = buildingId;
-        this.width = 64;
-        this.height = 64;
+        this.width = width;
+        this.height = height;
+        this.widthScale = this.width * scale;
+        this.heightScale = this.height * scale;
         this.center = {
-            x: this.position.x + this.width / 2,
-            y: this.position.y + this.height / 2
-        }
+            x: this.position.x + this.widthScale / 2,
+            y: this.position.y + this.heightScale / 2
+        };
         this.projectiles = [];
         this.radius = tower.radius;
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = tower.damage;
-        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: tower.upgradeImg}, tower.tw1, tower.tw2, tower.tw3, tower.tw4);
+        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: tower.upgradeImg, width: 142, height: 127, tw1: tower.tw1, tw2:tower.tw2, tw3:tower.tw3, tw4:tower.tw4});
         this.displayShop = false;
         this.frameShoot = tower.frameShoot;
         this.tower = tower;
@@ -44,6 +46,7 @@ class Building extends Sprite {
     update(speedGame) {
         // c.beginPath();
         // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
+        // c.strokeStyle = 'red';
         // c.stroke();
 
         this.elapsed++;
@@ -57,7 +60,7 @@ class Building extends Sprite {
                 this.loading = false;
             }
             c.fillStyle = 'green';
-            c.fillRect(this.position.x, this.position.y + this.height, (this.width* this.loadingPercent)/100, 5);
+            c.fillRect(this.position.x, this.position.y + this.heightScale, (this.widthScale* this.loadingPercent)/100, 5);
             this.draw();
             return;
         } else if (this.hover) {
@@ -68,8 +71,9 @@ class Building extends Sprite {
             this.frames.max = this.tower.framsMax;
         }
         this.draw();
-        if (this.target || !this.target && this.frames.current !== 0) super.update(speedGame);
-        if (this.target && this.frames.current === this.frameShoot && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
+
+        if (this.target || !this.target && this.frames.frameX !== 0) super.update(speedGame);
+        if (this.target && this.frames.frameX === this.frameShoot && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
     }
 
     shoot() {
@@ -92,7 +96,9 @@ class Building extends Sprite {
                     y: this.center.y - 50
                 },
                 enemy: this.target,
-                scale: 0.5
+                scale: 0.5,
+                width: 32,
+                height: 26
             })
         );
     }
