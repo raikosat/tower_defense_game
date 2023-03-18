@@ -5,7 +5,6 @@ class Building extends Sprite {
             imageSrc: tower.imageSrc,
             frames: {
                 max: tower.framsMax,
-
             },
             offset: {
                 x: tower.offset.x,
@@ -29,6 +28,10 @@ class Building extends Sprite {
         this.displayShop = false;
         this.frameShoot = tower.frameShoot;
         this.tower = tower;
+        this.loading = true;
+        this.loadingPercent = 0;
+        this.elapsed = 0;
+        this.loadTimeFinish = 3000;
     }
 
     draw() {
@@ -43,6 +46,28 @@ class Building extends Sprite {
         // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
         // c.stroke();
 
+        this.elapsed++;
+        if (this.loading) {
+            this.image.src = './img/buildings/loading.png';
+            this.frames.max = 1;
+            console.log(this.image.src);
+            if (this.loadingPercent < 100 && Math.round(this.elapsed % 0.8) == 0) {
+                this.loadingPercent += 1;
+            } 
+            if (this.loadingPercent >= 100) {
+                this.loading = false;
+            }
+            c.fillStyle = 'green';
+            c.fillRect(this.position.x, this.position.y + this.height, (this.width* this.loadingPercent)/100, 5);
+            this.draw();
+            return;
+        } else if (this.hover) {
+            this.image.src = this.tower.image_selected;
+            this.frames.max = this.tower.framsMax;
+        } else {
+            this.image.src = this.tower.imageSrc;
+            this.frames.max = this.tower.framsMax;
+        }
         this.draw();
         if (this.target || !this.target && this.frames.current !== 0) super.update(speedGame);
         if (this.target && this.frames.current === this.frameShoot && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();

@@ -264,7 +264,7 @@ canvas.addEventListener('click', (event) => {
     } else if (activeTile && activeTile.displayShop && !activeTile.isOccupied && isShoping) {
         // handle close shop of land
         this.closeShopOfLand(activeTile);
-    } else if (activeTile && activeTile.isOccupied && !activeTile.building.displayShop && !isShoping) {
+    } else if (activeTile && activeTile.isOccupied && !activeTile.building.displayShop && !isShoping && !activeTile.building.loading) {
         // handle display shop of building
         this.openShopOfBuilding(activeTile);
     } else if (activeTile && activeTile.isOccupied && activeTile.building.displayShop && isShoping) {
@@ -306,10 +306,10 @@ window.addEventListener('mousemove', (event) => {
             mouse.y > tile.position.y && mouse.y < tile.position.y + tile.size &&
             tile.isOccupied) {
             activeTile = tile;
-            activeTile.building.image.src = activeTile.building.tower.image_selected;
+            activeTile.building.hover = true;
             break;
         } else if (tile.isOccupied)  {
-            tile.building.image.src = tile.building.tower.imageSrc;
+            tile.building.hover = false;
         }
     }
 });
