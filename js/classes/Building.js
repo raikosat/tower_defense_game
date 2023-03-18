@@ -50,7 +50,6 @@ class Building extends Sprite {
         if (this.loading) {
             this.image.src = './img/buildings/loading.png';
             this.frames.max = 1;
-            console.log(this.image.src);
             if (this.loadingPercent < 100 && Math.round(this.elapsed % 0.8) == 0) {
                 this.loadingPercent += 1;
             } 
