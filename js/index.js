@@ -476,7 +476,8 @@ function checkUpgradeBuilding(event, activeTileShopping) {
     } else if (event.clientX > activeTileShopping.building.shop.slot1.position.x &&
         event.clientX < activeTileShopping.building.shop.slot1.position.x + activeTileShopping.building.shop.slot1.width &&
         event.clientY > activeTileShopping.building.shop.slot1.position.y &&
-        event.clientY < activeTileShopping.building.shop.slot1.position.y + activeTileShopping.building.shop.slot1.height) {
+        event.clientY < activeTileShopping.building.shop.slot1.position.y + activeTileShopping.building.shop.slot1.height &&
+        coins - priceTower >= 0) {
         for (let index = 0; index < buildings.length; index++) {
             const building = buildings[index];
             if (building.buildingId === activeTileShopping.building.buildingId) {
