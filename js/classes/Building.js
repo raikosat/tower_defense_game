@@ -1,5 +1,5 @@
 class Building extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, scale, tower }) {
+    constructor({ position = { x: 0, y: 0 }, scale, tower, buildingId}) {
         super({
             position,
             imageSrc: tower.imageSrc,
@@ -13,6 +13,7 @@ class Building extends Sprite {
             },
             scale: scale
         });
+        this.buildingId = buildingId;
         this.width = 64;
         this.height = 64;
         this.center = {
@@ -24,7 +25,7 @@ class Building extends Sprite {
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = tower.damage;
-        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: 'img/store/shop1.png'});
+        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: tower.upgradeImg}, tower.tw1, tower.tw2, tower.tw3, tower.tw4);
         this.displayShop = false;
         this.frameShoot = tower.frameShoot;
         this.tower = tower;

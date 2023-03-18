@@ -436,7 +436,8 @@ function checkBuyBuilding(event, activeTileShopping) {
                     y: activeTileShopping.position.y
                 },
                 scale: tower.scale,
-                tower: tower
+                tower: tower,
+                buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100))
             });
             buildings.push(building);
             activeTileShopping.building = building;
@@ -451,8 +452,10 @@ function checkBuyBuilding(event, activeTileShopping) {
 
 function checkUpgradeBuilding(event, activeTileShopping) {
     // detroy building
-    if (event.clientX > activeTileShopping.building.shop.slot3.position.x && event.clientX < activeTileShopping.building.shop.slot3.position.x + activeTileShopping.building.shop.slot3.width &&
-        event.clientY > activeTileShopping.building.shop.slot3.position.y && event.clientY < activeTileShopping.building.shop.slot3.position.y + activeTileShopping.building.shop.slot3.height) {
+    if (event.clientX > activeTileShopping.building.shop.slot3.position.x &&
+            event.clientX < activeTileShopping.building.shop.slot3.position.x + activeTileShopping.building.shop.slot3.width &&
+            event.clientY > activeTileShopping.building.shop.slot3.position.y &&
+            event.clientY < activeTileShopping.building.shop.slot3.position.y + activeTileShopping.building.shop.slot3.height) {
         coins += 30;
         for (let index = 0; index < buildings.length; index++) {
             const building = buildings[index];
@@ -470,5 +473,33 @@ function checkUpgradeBuilding(event, activeTileShopping) {
         activeTileShopping.displayShop = false;
         isShoping = false;
         activeTileShopping = undefined;
+    } else if (event.clientX > activeTileShopping.building.shop.slot1.position.x &&
+        event.clientX < activeTileShopping.building.shop.slot1.position.x + activeTileShopping.building.shop.slot1.width &&
+        event.clientY > activeTileShopping.building.shop.slot1.position.y &&
+        event.clientY < activeTileShopping.building.shop.slot1.position.y + activeTileShopping.building.shop.slot1.height) {
+        for (let index = 0; index < buildings.length; index++) {
+            const building = buildings[index];
+            if (building.buildingId === activeTileShopping.building.buildingId) {
+                buildings.splice(index, 1);
+                coins -= priceTower;
+                const tower = activeTileShopping.building.tower.tw1;
+                const building = new Building({
+                    position: {
+                        x: activeTileShopping.position.x,
+                        y: activeTileShopping.position.y
+                    },
+                    scale: tower.scale,
+                    tower: tower,
+                    buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100))
+                });
+                buildings.push(building);
+                activeTileShopping.building = building;
+                buildings.sort((a, b) => {
+                    return a.position.y - b.position.y
+                });
+                this.closeShopOfLand(activeTileShopping);
+                break;
+            }
+        }
     }
 }

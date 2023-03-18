@@ -4,6 +4,7 @@ class PlacementTile extends Sprite {
             position,
             imageSrc: 'img/buildings/flag.png'
         });
+        this.placementTileId;
         this.position = position;
         this.size = 64;
         this.isOccupied = false;
