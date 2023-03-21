@@ -34,7 +34,6 @@ class Building extends Sprite {
         this.loadingPercent = 0;
         this.elapsed = 0;
         this.frameHold = 3;
-        this.loadTimeFinish = 3000;
     }
 
     draw() {
@@ -54,7 +53,7 @@ class Building extends Sprite {
         if (this.loading) {
             this.image.src = './img/buildings/loading.png';
             this.frames.max = 1;
-            if (this.loadingPercent < 100 && Math.round(this.elapsed % 0.8) == 0) {
+            if (this.loadingPercent < 100 && Math.round(this.elapsed % (0.6 / speedGame)) == 0) {
                 this.loadingPercent += 1;
             }
             if (this.loadingPercent >= 100) {
@@ -88,7 +87,11 @@ class Building extends Sprite {
                 super.update(speedGame, deltaTime, timeInterval);
             }
         }
-        if (this.target && this.frames.frameX === this.frameShoot) this.shoot();
+        if (speedGame === 3) {
+            if (this.target && this.frames.frameX === this.frameShoot && this.elapsed % (this.frameHold/speedGame) === 0) this.shoot();
+        } else {
+            if (this.target && this.frames.frameX === this.frameShoot && this.frameTimer > (timeInterval)) this.shoot();
+        }
     }
 
     shoot() {
