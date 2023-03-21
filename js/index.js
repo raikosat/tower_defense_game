@@ -28,6 +28,9 @@ let coins = 250;
 let isShoping = false;
 let speedGame = 1;
 let speedMaxGame = 3;
+const fps = 50;
+let timeInterval = 1000/fps;
+let lastTime = 0;
 
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
@@ -107,7 +110,7 @@ function startGame() {
     this.drawLandFlag();
     setTimeout(() => {
         spawnEnemies();
-        animate();
+        animate(0);
     }, 1000);
 }
 
@@ -141,7 +144,10 @@ function showWave() {
     }, 3000);
 }
 
-function animate() {
+function animate(timeStamp) {
+    timeInterval = 1000/(fps*speedGame);
+    let deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
     const animationId = requestAnimationFrame(animate);
     c.drawImage(image, 0, 0);
     this.drawHeart();
@@ -151,7 +157,8 @@ function animate() {
     // enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
-        enemy.update(speedGame);
+        enemy.draw();
+        enemy.update(speedGame, deltaTime, timeInterval);
         if (enemy.position.x > canvas.width) {
             hearts -= 1;
             enemies.splice(i, 1);
@@ -166,7 +173,7 @@ function animate() {
     for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i];
         explosion.draw();
-        explosion.update(speedGame);
+        explosion.update(speedGame, deltaTime, timeInterval);
         if (explosion.frames.frameX >= explosion.frames.max - 1) {
             explosions.splice(i, 1);
         }
@@ -175,7 +182,8 @@ function animate() {
     // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
-        enemyDie.update(speedGame);
+        enemyDie.draw();
+        enemyDie.update(speedGame, deltaTime, timeInterval);
 
         if (enemyDie.frames.frameX >= enemyDie.frames.max - 1) {
             enemiesDie.splice(i, 1);
@@ -195,20 +203,20 @@ function animate() {
 
     // order display shop of building and shop of land
     if (activeTile && activeTile.displayShop) {
-        this.animationBuilding();
+        this.animationBuilding(speedGame, deltaTime, timeInterval);
         this.drawLandFlag();
     } else {
         this.drawLandFlag();
-        this.animationBuilding();
+        this.animationBuilding(speedGame, deltaTime, timeInterval);
     }
 }
 
-function animationBuilding() {
+function animationBuilding(speedGame, deltaTime, timeInterval) {
     buildings.sort((a, b) => {
         return a.displayShop - b.displayShop;
     });
     buildings.forEach((building) => {
-        building.update(speedGame);
+        building.update(speedGame, deltaTime, timeInterval);
         building.target = null;
         const validEnemies = enemies.filter(enemy => {
             const xDifference = enemy.center.x - building.center.x;
@@ -220,7 +228,7 @@ function animationBuilding() {
 
         for (let i = building.projectiles.length - 1; i >= 0; i--) {
             const projectile = building.projectiles[i];
-            projectile.update(speedGame);
+            projectile.update(speedGame, deltaTime, timeInterval);
 
             const xDifference = projectile.enemy.center.x - projectile.position.x;
             const yDifference = projectile.enemy.center.y - projectile.position.y;
@@ -330,7 +338,8 @@ window.addEventListener('mousemove', (event) => {
 });
 
 function createEnemy(xOffset, monster) {
-    const wp = this.randomWaypoints();
+    // const wp = this.randomWaypoints();
+    const wp = waypoints1_map1;
     enemies.push(new Enemy({
         position: {
             x: wp[0].x - xOffset,

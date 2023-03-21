@@ -1,5 +1,5 @@
 class Building extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, scale, tower, buildingId, width, height}) {
+    constructor({ position = { x: 0, y: 0 }, scale, tower, buildingId, width, height }) {
         super({
             position,
             imageSrc: tower.imageSrc,
@@ -26,13 +26,14 @@ class Building extends Sprite {
         this.target;
         this.elapsedSpawnTime = 0;
         this.damage = tower.damage;
-        this.shop = new Shop({ position: {x: this.position.x - 40 , y: this.position.y - 30 }, imageSrc: tower.upgradeImg, width: 142, height: 127, tw1: tower.tw1, tw2:tower.tw2, tw3:tower.tw3, tw4:tower.tw4});
+        this.shop = new Shop({ position: { x: this.position.x - 40, y: this.position.y - 30 }, imageSrc: tower.upgradeImg, width: 142, height: 127, tw1: tower.tw1, tw2: tower.tw2, tw3: tower.tw3, tw4: tower.tw4 });
         this.displayShop = false;
         this.frameShoot = tower.frameShoot;
         this.tower = tower;
         this.loading = true;
         this.loadingPercent = 0;
         this.elapsed = 0;
+        this.frameHold = 3;
         this.loadTimeFinish = 3000;
     }
 
@@ -40,10 +41,10 @@ class Building extends Sprite {
         super.draw();
         if (this.displayShop) {
             this.shop.update();
-        } 
+        }
     }
 
-    update(speedGame) {
+    update(speedGame, deltaTime, timeInterval) {
         // c.beginPath();
         // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
         // c.strokeStyle = 'red';
@@ -55,12 +56,12 @@ class Building extends Sprite {
             this.frames.max = 1;
             if (this.loadingPercent < 100 && Math.round(this.elapsed % 0.8) == 0) {
                 this.loadingPercent += 1;
-            } 
+            }
             if (this.loadingPercent >= 100) {
                 this.loading = false;
             }
             c.fillStyle = 'green';
-            c.fillRect(this.position.x, this.position.y + this.heightScale, (this.widthScale* this.loadingPercent)/100, 5);
+            c.fillRect(this.position.x, this.position.y + this.heightScale, (this.widthScale * this.loadingPercent) / 100, 5);
             this.draw();
             return;
         } else if (this.hover) {
@@ -72,8 +73,22 @@ class Building extends Sprite {
         }
         this.draw();
 
-        if (this.target || !this.target && this.frames.frameX !== 0) super.update(speedGame);
-        if (this.target && this.frames.frameX === this.frameShoot && this.frames.elapsed % (this.frames.hold/ speedGame) === 0) this.shoot();
+        if (this.target || !this.target && this.frames.frameX !== 0) {
+            if (speedGame === 3) {
+                if (this.elapsed % (this.frameHold/speedGame) === 0) {
+                    this.frames.frameX++;
+                    if (this.frames.frameX >= this.frames.max) {
+                        this.frames.frameX = 0;
+                    }
+                    this.frameTimer = 0;
+                } else {
+                    this.frameTimer += deltaTime;
+                }
+            } else {
+                super.update(speedGame, deltaTime, timeInterval);
+            }
+        }
+        if (this.target && this.frames.frameX === this.frameShoot) this.shoot();
     }
 
     shoot() {

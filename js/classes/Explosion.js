@@ -19,7 +19,7 @@ class Explosion extends Sprite {
         c.fillText(this.damage, this.position.x, this.position.y);
     }
 
-    update(speedGame) {
-        super.update(speedGame);
+    update(speedGame, deltaTime, timeInterval) {
+        super.update(speedGame, deltaTime, timeInterval);
     }
 }

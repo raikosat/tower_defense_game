@@ -40,7 +40,7 @@ class Enemy extends Sprite {
         this.drawHealthBar();
     }
 
-    update(speedGame) {
+    update(speedGame, deltaTime, timeInterval) {
         // c.strokeStyle = 'black';
         // c.strokeRect(this.position.x, this.position.y, this.width, this.height);
 
@@ -62,8 +62,7 @@ class Enemy extends Sprite {
             }
         }
 
-        this.draw();
-        super.update(speedGame);
+        super.update(speedGame, deltaTime, timeInterval);
 
         const yDistance = waypoint.y - this.center.y;
         const xDistance = waypoint.x - this.center.x;
