@@ -167,7 +167,6 @@ function animate() {
         const explosion = explosions[i];
         explosion.draw();
         explosion.update(speedGame);
-
         if (explosion.frames.frameX >= explosion.frames.max - 1) {
             explosions.splice(i, 1);
         }
@@ -242,7 +241,7 @@ function animationBuilding() {
                         coins += projectile.enemy.bounes;
                     };
                 }
-                this.createExplosions(projectile);
+                this.createExplosions(projectile, building.damage);
                 building.projectiles.splice(i, 1);
             }
         }
@@ -364,19 +363,16 @@ function createEnemyDie(projectile) {
         framesMax: projectile.enemy.monster.die.framesMax,
         scale: projectile.enemy.monster.die.scale,
         width: projectile.enemy.monster.die.width,
-        height: projectile.enemy.monster.die.height
+        height: projectile.enemy.monster.die.height,
+        waypoints: projectile.enemy.waypoints,
+        dead: true
     }));
 }
 
-function createExplosions(projectile) {
-    explosions.push(new Sprite({
+function createExplosions(projectile, damage) {
+    explosions.push(new Explostion({
         position: { x: projectile.position.x, y: projectile.position.y },
-        imageSrc: './img/buildings/explosion.png',
-        frames: { max: 4 },
-        offset: { x: 0, y: 0 },
-        scale: 0.5,
-        width: 78,
-        height: 84
+        damage: damage
     }));
 }
 
