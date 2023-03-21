@@ -355,7 +355,8 @@ function createEnemy(xOffset, monster) {
         waypoints: wp,
         monster: monster,
         width: monster.walk.width,
-        height: monster.walk.height
+        height: monster.walk.height,
+        frameYMax: monster.walk.frameYMax
     }));
 }
 

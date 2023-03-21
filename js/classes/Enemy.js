@@ -1,5 +1,5 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height, dead = false}) {
+    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height, dead = false, frameYMax}) {
         super({
             position,
             imageSrc: imageSrc,
@@ -33,6 +33,7 @@ class Enemy extends Sprite {
         this.waypoints = waypoints;
         this.monster = monster;
         this.dead = dead;
+        this.frameYMax = frameYMax;
     }
 
     draw() {
@@ -52,7 +53,7 @@ class Enemy extends Sprite {
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
 
-        if (this.dead) {
+        if (this.dead || this.frameYMax === 1) {
             this.frames.frameY = 0;
         } else {
             if(waypoint.x > this.center.x) {
