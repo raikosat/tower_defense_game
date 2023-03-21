@@ -370,7 +370,7 @@ function createEnemyDie(projectile) {
 }
 
 function createExplosions(projectile, damage) {
-    explosions.push(new Explostion({
+    explosions.push(new Explosion({
         position: { x: projectile.position.x, y: projectile.position.y },
         damage: damage
     }));

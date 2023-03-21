@@ -1,4 +1,4 @@
-class Explostion extends Sprite {
+class Explosion extends Sprite {
     constructor({position = {x: 0, y: 0}, damage}) {
         super({
             position: position,
