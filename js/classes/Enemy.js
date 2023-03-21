@@ -40,9 +40,6 @@ class Enemy extends Sprite {
     }
 
     update(speedGame) {
-        this.draw();
-        super.update(speedGame);
-
         // c.strokeStyle = 'black';
         // c.strokeRect(this.position.x, this.position.y, this.width, this.height);
 
@@ -53,6 +50,16 @@ class Enemy extends Sprite {
         
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
+
+        if(waypoint.x > this.center.x) {
+            this.frames.frameY = 0;
+        } else {
+            this.frames.frameY = 1;
+        }
+
+        this.draw();
+        super.update(speedGame);
+
         const yDistance = waypoint.y - this.center.y;
         const xDistance = waypoint.x - this.center.x;
         const angle = Math.atan2(yDistance, xDistance);

@@ -31,7 +31,7 @@ class Sprite {
         const crop = {
             position: {
                 x: this.width * this.frames.frameX,
-                y: 0
+                y: this.height * this.frames.frameY
             },
             width: this.width,
             height: this.height
