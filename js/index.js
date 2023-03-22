@@ -151,26 +151,13 @@ function animate(timeStamp) {
     this.drawCoin();
     this.drawSkip();
 
-    // enemy into end map
-    for (let i = enemies.length - 1; i >= 0; i--) {
-        const enemy = enemies[i];
-        enemy.draw();
-        enemy.update(speedGame, deltaTime, timeInterval);
-        if (enemy.position.x > canvas.width) {
-            hearts -= 1;
-            enemies.splice(i, 1);
-            if (hearts <= 0) {
-                cancelAnimationFrame(animationId);
-                document.querySelector('#gameOver').style.display = 'flex';
-            }
-        }
-    }
+    this.trackingEnemyIntoEndMap(deltaTime);
 
-    this.animationExplosions();
+    this.animationExplosions(deltaTime);
 
-    this.animationEnemiesDie();
+    this.animationEnemiesDie(deltaTime);
 
-    this.trackingTotalAmountOfEnemies();
+    this.trackingTotalAmountOfEnemies(deltaTime);
 
     // order display shop of building and shop of land
     if (activeTile && activeTile.displayShop) {
@@ -182,7 +169,7 @@ function animate(timeStamp) {
     }
 }
 
-function animationExplosions() {
+function animationExplosions(deltaTime) {
     // animation explosions
     for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i];
@@ -194,7 +181,7 @@ function animationExplosions() {
     }
 }
 
-function animationEnemiesDie() {
+function animationEnemiesDie(deltaTime) {
     // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
@@ -216,6 +203,23 @@ function trackingTotalAmountOfEnemies() {
         } else {
             document.querySelector('#gameOver').innerHTML = "WIN";
             document.querySelector('#gameOver').style.display = 'flex';
+        }
+    }
+}
+
+function trackingEnemyIntoEndMap(deltaTime) {
+    // tracking enemy into end map
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        const enemy = enemies[i];
+        enemy.draw();
+        enemy.update(speedGame, deltaTime, timeInterval);
+        if (enemy.position.x > canvas.width) {
+            hearts -= 1;
+            enemies.splice(i, 1);
+            if (hearts <= 0) {
+                cancelAnimationFrame(animationId);
+                document.querySelector('#gameOver').style.display = 'flex';
+            }
         }
     }
 }
