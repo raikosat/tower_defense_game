@@ -19,6 +19,11 @@ const mouse = {
     y: undefined
 }
 const priceTower = 70;
+const soundBg = new Audio();
+soundBg.src = './sound/sound-background.mp3';
+soundBg.loop = true;
+soundBg.volume = 0.5;
+
 let activeTile = undefined;
 let activeTileShopping = undefined;
 let wave = 1;
@@ -93,11 +98,7 @@ function createPlacementTilesData2D() {
 }
 
 function soundBackground() {
-    const sound = new Audio();
-    sound.src = './sound/sound-background.mp3';
-    sound.loop = true;
-    sound.volume = 0.5;
-    sound.play();
+    soundBg.play();
 }
 
 image.onload = () => {
