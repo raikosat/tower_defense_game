@@ -26,7 +26,7 @@ soundBg.volume = 0.5;
 
 let activeTile = undefined;
 let activeTileShopping = undefined;
-let wave = 1;
+let waveCurrent = 1;
 let hearts = 10;
 let coins = 250;
 let isShoping = false;
@@ -54,7 +54,7 @@ const coin = new Sprite({
 });
 
 const b_skip = new Sprite({
-    position: { x: canvas.width - 270, y: 10 },
+    position: { x: 100, y: canvas.height - 50 },
     imageSrc: './img/icon/b_skip.png',
     scale: 0.35,
     width: 130,
@@ -62,7 +62,7 @@ const b_skip = new Sprite({
 });
 
 const b_pause = new Sprite({
-    position: { x: canvas.width - 340, y: 10 },
+    position: { x: 20, y: canvas.height - 50 },
     imageSrc: './img/icon/b_pause.png',
     scale: 0.35,
     width: 169,
@@ -156,7 +156,7 @@ function pauseGame() {
 
 function spawnEnemies() {
     showWave();
-    const turn = wavesMap1[wave - 1];
+    const turn = wavesMap1[waveCurrent - 1];
     const enemiesTurn = turn.enemies;
 
     for (let k = 0; k < enemiesTurn.length; k++) {
@@ -166,7 +166,7 @@ function spawnEnemies() {
         for (let i = 0; i < enemiesDetails.count; i++) {
             if (i == 0) {
                 xOffset = 100;
-            } else if (i % 6 == 0) {
+            } else if (i % 5 == 0) {
                 xOffset += 800;
             } else {
                 xOffset += 40;
@@ -179,7 +179,7 @@ function spawnEnemies() {
 function showWave() {
     document.querySelector('#flex-container').style.display = 'flex';
     document.querySelector('#wave').style.display = 'flex';
-    document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
+    document.querySelector('#wave').innerHTML = 'WAVE ' + waveCurrent;
     setTimeout(() => {
         document.querySelector('#flex-container').style.display = 'none';
         document.querySelector('#wave').style.display = 'none';
@@ -247,8 +247,8 @@ function animationEnemiesDie(deltaTime) {
 function trackingTotalAmountOfEnemies() {
     // tracking total amount of enemies
     if (enemies.length === 0) {
-        wave++;
-        if (wave <= wavesMap1.length) {
+        waveCurrent++;
+        if (waveCurrent <= wavesMap1.length) {
             spawnEnemies();
         } else {
             document.querySelector('#gameOver').innerHTML = "WIN";
@@ -493,10 +493,13 @@ function drawCoin() {
 }
 
 function drawSkip() {
+    if (speedGame === 3) {
+        b_skip.image.src = './img/icon/b_skip_selected.png';
+    }
     b_skip.draw();
     c.fillStyle = 'white';
-    c.font = "bold 22px Changa One cursive";
-    c.fillText('X' + speedGame, canvas.width - 220, 33);
+    c.font = "bold 25px Changa One cursive";
+    c.fillText('X' + speedGame, b_skip.position.x + 50, b_skip.position.y + 22);
 }
 
 function drawPause() {

@@ -1,0 +1,49 @@
+body {
+    background-color: black;
+    font-family: 'Changa One', cursive;
+    box-sizing: border-box;
+}
+
+.startGame {
+    position: relative;
+    display: inline-block;
+}
+
+.startGame .b_play-top {
+    display: none;
+    position: absolute;
+    z-index: 99;
+}
+.startGame:hover .b_play-top {
+    display: inline;
+}
+
+.restart {
+    position: relative;
+    display: inline-block;
+}
+
+.restart .b_restart-top {
+    display: none;
+    position: absolute;
+    z-index: 99;
+}
+
+.restart:hover .b_restart-top {
+    display: inline;
+}
+
+.continue {
+    position: relative;
+    display: inline-block;
+}
+
+.continue .b_continue-top {
+    display: none;
+    position: absolute;
+    z-index: 99;
+}
+
+.continue:hover .b_continue-top {
+    display: inline;
+}
