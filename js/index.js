@@ -338,8 +338,7 @@ window.addEventListener('mousemove', (event) => {
 });
 
 function createEnemy(xOffset, monster) {
-    // const wp = this.randomWaypoints();
-    const wp = waypoints1_map1;
+    const wp = this.randomWaypoints();
     enemies.push(new Enemy({
         position: {
             x: wp[0].x - xOffset,
