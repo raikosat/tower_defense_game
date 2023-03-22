@@ -564,17 +564,22 @@ function checkUpgradeBuilding(event, activeTileShopping) {
 }
 
 function hoverShopOfLand() {
-    if (activeTileShopping && mouse.x > activeTileShopping.shop.slot1.position.x && mouse.x < activeTileShopping.shop.slot1.position.x + (activeTileShopping.shop.slot1.width) &&
-        mouse.y > activeTileShopping.shop.slot1.position.y && mouse.y < activeTileShopping.shop.slot1.position.y + (activeTileShopping.shop.slot1.height)) {
+    if (!activeTileShopping) return;
+    const slot1 = activeTileShopping.shop.slot1;
+    const slot2 = activeTileShopping.shop.slot2;
+    const slot3 = activeTileShopping.shop.slot3;
+    const slot4 = activeTileShopping.shop.slot4;
+    if (activeTileShopping && mouse.x > slot1.position.x && mouse.x < slot1.position.x + (slot1.width) &&
+        mouse.y > slot1.position.y && mouse.y < slot1.position.y + (slot1.height)) {
         activeTileShopping.shop.slot1Hover = true;
-    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot2.position.x && mouse.x < activeTileShopping.shop.slot2.position.x + (activeTileShopping.shop.slot2.width) &&
-        mouse.y > activeTileShopping.shop.slot2.position.y && mouse.y < activeTileShopping.shop.slot2.position.y + (activeTileShopping.shop.slot2.height)) {
+    } else if (activeTileShopping && mouse.x > slot2.position.x && mouse.x < slot2.position.x + (slot2.width) &&
+        mouse.y > slot2.position.y && mouse.y < slot2.position.y + (slot2.height)) {
         activeTileShopping.shop.slot2Hover = true;
-    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot3.position.x && mouse.x < activeTileShopping.shop.slot3.position.x + (activeTileShopping.shop.slot3.width) &&
-        mouse.y > activeTileShopping.shop.slot3.position.y && mouse.y < activeTileShopping.shop.slot3.position.y + (activeTileShopping.shop.slot3.height)) {
+    } else if (activeTileShopping && mouse.x > slot3.position.x && mouse.x < slot3.position.x + (slot3.width) &&
+        mouse.y > slot3.position.y && mouse.y < slot3.position.y + (slot3.height)) {
         activeTileShopping.shop.slot3Hover = true;
-    } else if (activeTileShopping && mouse.x > activeTileShopping.shop.slot4.position.x && mouse.x < activeTileShopping.shop.slot4.position.x + (activeTileShopping.shop.slot4.width) &&
-        mouse.y > activeTileShopping.shop.slot4.position.y && mouse.y < activeTileShopping.shop.slot4.position.y + (activeTileShopping.shop.slot4.height)) {
+    } else if (activeTileShopping && mouse.x > slot4.position.x && mouse.x < slot4.position.x + (slot4.width) &&
+        mouse.y > slot4.position.y && mouse.y < slot4.position.y + (slot4.height)) {
         activeTileShopping.shop.slot4Hover = true;
     } else if (activeTileShopping) {
         activeTileShopping.shop.slot1Hover = false;
@@ -585,17 +590,23 @@ function hoverShopOfLand() {
 }
 
 function hoverShopOfbuilding() {
-    if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot1.position.x && mouse.x < activeTileShopping.building.shop.slot1.position.x + (activeTileShopping.building.shop.slot1.width) &&
-        mouse.y > activeTileShopping.building.shop.slot1.position.y && mouse.y < activeTileShopping.building.shop.slot1.position.y + (activeTileShopping.building.shop.slot1.height)) {
+    if (!activeTileShopping) return;
+    if (!activeTileShopping.building) return;
+    const slot1 = activeTileShopping.building.shop.slot1;
+    const slot2 = activeTileShopping.building.shop.slot2;
+    const slot3 = activeTileShopping.building.shop.slot3;
+    const slot4 = activeTileShopping.building.shop.slot4;
+    if (activeTileShopping && activeTileShopping.building && mouse.x > slot1.position.x && mouse.x < slot1.position.x + (slot1.width) &&
+        mouse.y > slot1.position.y && mouse.y < slot1.position.y + (slot1.height)) {
         activeTileShopping.building.shop.slot1Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot2.position.x && mouse.x < activeTileShopping.building.shop.slot2.position.x + (activeTileShopping.building.shop.slot2.width) &&
-        mouse.y > activeTileShopping.building.shop.slot2.position.y && mouse.y < activeTileShopping.building.shop.slot2.position.y + (activeTileShopping.building.shop.slot2.height)) {
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot2.position.x && mouse.x < slot2.position.x + (slot2.width) &&
+        mouse.y > slot2.position.y && mouse.y < activeTileShopping.building.shop.slot2.position.y + (slot2.height)) {
         activeTileShopping.building.shop.slot2Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot3.position.x && mouse.x < activeTileShopping.building.shop.slot3.position.x + (activeTileShopping.building.shop.slot3.width) &&
-        mouse.y > activeTileShopping.building.shop.slot3.position.y && mouse.y < activeTileShopping.building.shop.slot3.position.y + (activeTileShopping.building.shop.slot3.height)) {
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot3.position.x && mouse.x < slot3.position.x + (slot3.width) &&
+        mouse.y > slot3.position.y && mouse.y < slot3.position.y + (slot3.height)) {
         activeTileShopping.building.shop.slot3Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > activeTileShopping.building.shop.slot4.position.x && mouse.x < activeTileShopping.building.shop.slot4.position.x + (activeTileShopping.building.shop.slot4.width) &&
-        mouse.y > activeTileShopping.building.shop.slot4.position.y && mouse.y < activeTileShopping.building.shop.slot4.position.y + (activeTileShopping.building.shop.slot4.height)) {
+    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot4.position.x && mouse.x < slot4.position.x + (activeTileShopping.building.shop.slot4.width) &&
+        mouse.y > slot4.position.y && mouse.y < slot4.position.y + (slot4.height)) {
         activeTileShopping.building.shop.slot4Hover = true;
     } else if (activeTileShopping && activeTileShopping.building) {
         activeTileShopping.building.shop.slot1Hover = false;
