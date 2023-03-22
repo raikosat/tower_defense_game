@@ -166,6 +166,23 @@ function animate(timeStamp) {
         }
     }
 
+    this.animationExplosions();
+
+    this.animationEnemiesDie();
+
+    this.trackingTotalAmountOfEnemies();
+
+    // order display shop of building and shop of land
+    if (activeTile && activeTile.displayShop) {
+        this.animationBuilding(speedGame, deltaTime, timeInterval);
+        this.drawLandFlag();
+    } else {
+        this.drawLandFlag();
+        this.animationBuilding(speedGame, deltaTime, timeInterval);
+    }
+}
+
+function animationExplosions() {
     // animation explosions
     for (let i = explosions.length - 1; i >= 0; i--) {
         const explosion = explosions[i];
@@ -175,7 +192,9 @@ function animate(timeStamp) {
             explosions.splice(i, 1);
         }
     }
+}
 
+function animationEnemiesDie() {
     // animation enemies die
     for (let i = enemiesDie.length - 1; i >= 0; i--) {
         const enemyDie = enemiesDie[i];
@@ -186,7 +205,9 @@ function animate(timeStamp) {
             enemiesDie.splice(i, 1);
         }
     }
+}
 
+function trackingTotalAmountOfEnemies() {
     // tracking total amount of enemies
     if (enemies.length === 0) {
         wave++;
@@ -196,15 +217,6 @@ function animate(timeStamp) {
             document.querySelector('#gameOver').innerHTML = "WIN";
             document.querySelector('#gameOver').style.display = 'flex';
         }
-    }
-
-    // order display shop of building and shop of land
-    if (activeTile && activeTile.displayShop) {
-        this.animationBuilding(speedGame, deltaTime, timeInterval);
-        this.drawLandFlag();
-    } else {
-        this.drawLandFlag();
-        this.animationBuilding(speedGame, deltaTime, timeInterval);
     }
 }
 
