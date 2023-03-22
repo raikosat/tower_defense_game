@@ -22,7 +22,6 @@ const priceTower = 70;
 let activeTile = undefined;
 let activeTileShopping = undefined;
 let wave = 1;
-let enemyCount = 3;
 let hearts = 10;
 let coins = 250;
 let isShoping = false;
@@ -31,6 +30,7 @@ let speedMaxGame = 3;
 const fps = 50;
 let timeInterval = 1000 / fps;
 let lastTime = 0;
+let isPaused = false;
 
 const heart = new Sprite({
     position: { x: canvas.width - 90, y: 15 },
@@ -56,12 +56,19 @@ const b_skip = new Sprite({
     height: 78
 });
 
+const b_pause = new Sprite({
+    position: { x: canvas.width - 340, y: 10 },
+    imageSrc: './img/icon/b_pause.png',
+    scale: 0.35,
+    width: 169,
+    height: 78
+});
+
 function initPlacementTilesData() {
     for (let i = 0; i < placementTilesData.length; i += 20) {
         placementTilesData2D.push(placementTilesData.slice(i, i + 20));
     }
 }
-initPlacementTilesData();
 
 function createPlacementTilesData2D() {
     placementTilesData2D.forEach((row, y) => {
@@ -84,7 +91,6 @@ function createPlacementTilesData2D() {
         });
     });
 }
-createPlacementTilesData2D();
 
 function soundBackground() {
     const sound = new Audio();
@@ -98,17 +104,53 @@ image.onload = () => {
     c.drawImage(image, 0, 0);
 }
 
+function reset() {
+    hearts = 10;
+    coins = 250;
+    speedGame = 1;
+    buildings.splice(0, buildings.length);
+    placementTiles.splice(0, placementTiles.length);
+    explosions.splice(0, explosions.length);
+    enemies.splice(0, enemies.length);
+    enemiesDie.splice(0, enemiesDie.length);
+    this.initPlacementTilesData();
+}
+
 function startGame() {
+    document.querySelector('#flex-container').style.display = 'none';
     document.querySelector('#startGame').style.display = 'none';
-    soundBackground();
+    document.querySelector('#continue').style.display = 'none';
+    document.querySelector('#restart').style.display = 'none';
+    document.querySelector('#gameOver').style.display = 'none';
+    c.drawImage(image, 0, 0);
+    this.reset();
+    this.createPlacementTilesData2D();
+    this.soundBackground();
     this.drawHeart();
     this.drawCoin();
     this.drawSkip();
+    this.drawPause();
     this.drawLandFlag();
+    isPaused = false;
     setTimeout(() => {
         spawnEnemies();
         animate(0);
     }, 1000);
+}
+
+function continueGame() {
+    document.querySelector('#flex-container').style.display = 'none';
+    document.querySelector('#continue').style.display = 'none';
+    document.querySelector('#restart').style.display = 'none';
+    isPaused = false;
+    animate(lastTime);
+}
+
+function pauseGame() {
+    isPaused = true;
+    document.querySelector('#flex-container').style.display = 'flex';
+    document.querySelector('#restart').style.display = 'flex';
+    document.querySelector('#continue').style.display = 'flex';
 }
 
 function spawnEnemies() {
@@ -134,24 +176,31 @@ function spawnEnemies() {
 }
 
 function showWave() {
+    document.querySelector('#flex-container').style.display = 'flex';
     document.querySelector('#wave').style.display = 'flex';
     document.querySelector('#wave').innerHTML = 'WAVE ' + wave;
     setTimeout(() => {
+        document.querySelector('#flex-container').style.display = 'none';
         document.querySelector('#wave').style.display = 'none';
-    }, 3000);
+    }, 1000);
 }
 
 function animate(timeStamp) {
-    timeInterval = 1000 / (fps * speedGame);
-    let deltaTime = timeStamp - lastTime;
-    lastTime = timeStamp;
-    const animationId = requestAnimationFrame(animate);
+    if (isPaused) {
+        return;
+    }
     c.drawImage(image, 0, 0);
     this.drawHeart();
     this.drawCoin();
     this.drawSkip();
+    this.drawPause();
 
-    this.trackingEnemyIntoEndMap(deltaTime);
+    timeInterval = 1000 / (fps * speedGame);
+    let deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
+    const animationId = requestAnimationFrame(animate);
+
+    this.trackingEnemyIntoEndMap(deltaTime, animationId);
 
     this.animationExplosions(deltaTime);
 
@@ -207,7 +256,7 @@ function trackingTotalAmountOfEnemies() {
     }
 }
 
-function trackingEnemyIntoEndMap(deltaTime) {
+function trackingEnemyIntoEndMap(deltaTime, animationId) {
     // tracking enemy into end map
     for (let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
@@ -218,6 +267,8 @@ function trackingEnemyIntoEndMap(deltaTime) {
             enemies.splice(i, 1);
             if (hearts <= 0) {
                 cancelAnimationFrame(animationId);
+                document.querySelector('#flex-container').style.display = 'flex';
+                document.querySelector('#restart').style.display = 'flex';
                 document.querySelector('#gameOver').style.display = 'flex';
             }
         }
@@ -293,6 +344,11 @@ canvas.addEventListener('click', (event) => {
         event.clientY < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
         speedGame = (speedGame == 1 ? speedMaxGame : 1);
         this.drawSkip();
+    } else if (event.clientX > b_pause.position.x &&
+        event.clientX < b_pause.position.x + (b_pause.image.width * b_pause.scale) &&
+        event.clientY > b_pause.position.y &&
+        event.clientY < b_pause.position.y + (b_pause.image.height * b_pause.scale)) {
+        this.pauseGame();
     } else if (activeTile && !activeTile.displayShop && !activeTile.isOccupied && !isShoping) {
         // handle display shop of land
         this.openShopOfLand(activeTile);
@@ -318,11 +374,20 @@ window.addEventListener('mousemove', (event) => {
     mouse.x = event.clientX;
     mouse.y = event.clientY;
 
+    // button skip
     if (mouse.x > b_skip.position.x && mouse.x < b_skip.position.x + (b_skip.image.width * b_skip.scale) &&
         mouse.y > b_skip.position.y && mouse.y < b_skip.position.y + (b_skip.image.height * b_skip.scale)) {
         b_skip.image.src = './img/icon/b_skip_selected.png';
     } else {
         b_skip.image.src = './img/icon/b_skip.png';
+    }
+
+    // button pause
+    if (mouse.x > b_pause.position.x && mouse.x < b_pause.position.x + (b_pause.image.width * b_pause.scale) &&
+        mouse.y > b_pause.position.y && mouse.y < b_pause.position.y + (b_pause.image.height * b_pause.scale) && !isPaused) {
+        b_pause.image.src = './img/icon/b_pause_selected.png';
+    } else {
+        b_pause.image.src = './img/icon/b_pause.png';
     }
 
     this.hoverShopOfLand();
@@ -350,6 +415,13 @@ window.addEventListener('mousemove', (event) => {
         } else if (tile.isOccupied) {
             tile.building.hover = false;
         }
+    }
+});
+
+window.addEventListener('keydown', (event) => {
+    const key = event.key;
+    if (key === 'Escape') {
+        this.pauseGame();
     }
 });
 
@@ -424,6 +496,10 @@ function drawSkip() {
     c.fillStyle = 'white';
     c.font = "bold 22px Changa One cursive";
     c.fillText('X' + speedGame, canvas.width - 220, 33);
+}
+
+function drawPause() {
+    b_pause.draw();
 }
 
 function drawLandFlag() {

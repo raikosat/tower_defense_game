@@ -6,26 +6,42 @@
         background-color: black;
         font-family: 'Changa One', cursive;
     }
+
     .hover-shadow:hover {
         background: url('img/icon/b_play_hover.png') no-repeat;
-        
+    }
+
+    .hover-shadow-continue:hover {
+        background: url('img/icon/b_continue_selected.png') no-repeat;
+    }
+
+    .hover-shadow-restart:hover {
+        background: url('img/icon/b_continue_selected.png') no-repeat;
     }
 </style>
 <div style="position: relative; display: inline-block;">
     <canvas></canvas>
-    <div id="startGame"
+    <div id="flex-container"
         style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: center; color: white;">
-        <div style="display: grid;">
-            <div style="display: flex; align-items: center; justify-content: center;">
-                <img id="b_play" src="img/icon/b_play.png"  onclick="startGame();" class="hover-shadow"/>
+        <div style="display: grid; height: 200px">
+            <div id="startGame" style="display: flex; align-items: center; justify-content: center;">
+                <img id="b_play" src="img/icon/b_play.png" onclick="startGame();" class="hover-shadow" />
+            </div>
+            <div id="restart" style="display: none; align-items: center; justify-content: center;">
+                <img id="b_play" src="img/icon/b_restart.png" onclick="startGame();" class="hover-shadow-restart" />
+            </div>
+            <div id="continue" style="display: none; align-items: center; justify-content: center;">
+                <img id="b_play" src="img/icon/b_continue.png" onclick="continueGame();"
+                    class="hover-shadow-continue" />
+            </div>
+            <div id="wave"
+                style="display: none; align-items: center; justify-content: center; font-size: 72px; color: white; -webkit-text-stroke: 3px black;">
+            </div>
+            <div id="gameOver"
+                style="display: none; align-items: center; justify-content: center; font-size: 72px; color: white;-webkit-text-stroke: 3px black;">
+                GAME OVER
             </div>
         </div>
-    </div>
-    <div id="wave" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; 
-        display: none; align-items: center; justify-content: center; font-size: 72px; color: white; -webkit-text-stroke: 3px black;">
-    </div>
-    <div id="gameOver" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: none; align-items: center; justify-content: center; font-size: 72px; color: white;-webkit-text-stroke: 3px black;">
-        GAME OVER
     </div>
 </div>
 
