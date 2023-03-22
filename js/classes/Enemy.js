@@ -1,5 +1,5 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height, dead = false}) {
+    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height, dead = false, frameYMax}) {
         super({
             position,
             imageSrc: imageSrc,
@@ -33,6 +33,7 @@ class Enemy extends Sprite {
         this.waypoints = waypoints;
         this.monster = monster;
         this.dead = dead;
+        this.frameYMax = frameYMax;
     }
 
     draw() {
@@ -40,7 +41,7 @@ class Enemy extends Sprite {
         this.drawHealthBar();
     }
 
-    update(speedGame) {
+    update(speedGame, deltaTime, timeInterval) {
         // c.strokeStyle = 'black';
         // c.strokeRect(this.position.x, this.position.y, this.width, this.height);
 
@@ -52,7 +53,7 @@ class Enemy extends Sprite {
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
 
-        if (this.dead) {
+        if (this.dead || this.frameYMax === 1) {
             this.frames.frameY = 0;
         } else {
             if(waypoint.x > this.center.x) {
@@ -62,8 +63,7 @@ class Enemy extends Sprite {
             }
         }
 
-        this.draw();
-        super.update(speedGame);
+        super.update(speedGame, deltaTime, timeInterval);
 
         const yDistance = waypoint.y - this.center.y;
         const xDistance = waypoint.x - this.center.x;

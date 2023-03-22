@@ -6,15 +6,13 @@ class Sprite {
         this.frames = {
             max: frames.max,
             frameX: 0,
-            frameY: 0,
-            current: 0,
-            elapsed: 0,
-            hold: 3
+            frameY: 0
         };
         this.offset = offset;
         this.scale = scale;
         this.width = width;
         this.height = height;
+        this.frameTimer = 0;
     }
 
     draw() {
@@ -49,14 +47,16 @@ class Sprite {
         );
     }
 
-    update(speedGame) {
+    update(speedGame, deltaTime, timeInterval) {
         // reponsible for animation
-        this.frames.elapsed++;
-        if (this.frames.elapsed % (this.frames.hold / speedGame) === 0) {
+        if (this.frameTimer > (timeInterval)) {
             this.frames.frameX++;
             if (this.frames.frameX >= this.frames.max) {
                 this.frames.frameX = 0;
             }
+            this.frameTimer = 0;
+        } else {
+            this.frameTimer += deltaTime;
         }
     }
 }
