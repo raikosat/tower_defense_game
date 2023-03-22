@@ -29,7 +29,7 @@ let isShoping = false;
 let speedGame = 1;
 let speedMaxGame = 3;
 const fps = 50;
-let timeInterval = 1000/fps;
+let timeInterval = 1000 / fps;
 let lastTime = 0;
 
 const heart = new Sprite({
@@ -87,13 +87,10 @@ function createPlacementTilesData2D() {
 createPlacementTilesData2D();
 
 function soundBackground() {
-    var sound = document.createElement("audio");
+    const sound = new Audio();
     sound.src = './sound/sound-background.mp3';
-    sound.setAttribute("preload", "auto");
-    sound.setAttribute("controls", "none");
-    sound.style.display = "none";
     sound.loop = true;
-    document.body.appendChild(sound);
+    sound.volume = 0.5;
     sound.play();
 }
 
@@ -145,7 +142,7 @@ function showWave() {
 }
 
 function animate(timeStamp) {
-    timeInterval = 1000/(fps*speedGame);
+    timeInterval = 1000 / (fps * speedGame);
     let deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     const animationId = requestAnimationFrame(animate);
@@ -249,6 +246,10 @@ function animationBuilding(speedGame, deltaTime, timeInterval) {
                         coins += projectile.enemy.bounes;
                     };
                 }
+                const stone_break = new Audio();
+                stone_break.src = './sound/stone_break.ogg';
+                stone_break.volume = 0.3;
+                stone_break.play();
                 this.createExplosions(projectile, building.damage);
                 building.projectiles.splice(i, 1);
             }
@@ -256,17 +257,16 @@ function animationBuilding(speedGame, deltaTime, timeInterval) {
     });
 }
 
-function sound(soundSrc) {
-    var sound = document.createElement("audio");
-    sound.src = soundSrc;
-    sound.setAttribute("preload", "auto");
-    sound.setAttribute("controls", "none");
-    sound.style.display = "none";
-    document.body.appendChild(sound);
-    sound.play();
-    setTimeout(() => {
-        sound.remove();
-    }, 500);
+function clickSound() {
+    const click = new Audio();
+    click.src = './sound/click_sound.mp3';
+    click.play();
+}
+
+function destroySound() {
+    const click = new Audio();
+    click.src = './sound/building_destroy.wav';
+    click.play();
 }
 
 canvas.addEventListener('click', (event) => {
@@ -331,7 +331,7 @@ window.addEventListener('mousemove', (event) => {
             activeTile = tile;
             activeTile.building.hover = true;
             break;
-        } else if (tile.isOccupied)  {
+        } else if (tile.isOccupied) {
             tile.building.hover = false;
         }
     }
@@ -360,7 +360,9 @@ function createEnemy(xOffset, monster) {
 }
 
 function createEnemyDie(projectile) {
-    sound('./sound/orc-death.mp3');
+    const sound = new Audio();;
+    sound.src = './sound/orc-death.mp3';
+    sound.play();
     enemiesDie.push(new Enemy({
         position: {
             x: projectile.enemy.position.x,
@@ -427,24 +429,28 @@ function randomWaypoints() {
 }
 
 function openShopOfLand(activeTile) {
+    this.clickSound();
     activeTile.displayShop = true;
     isShoping = true;
     activeTileShopping = activeTile;
 }
 
 function closeShopOfLand(activeTile) {
+    this.clickSound();
     activeTile.displayShop = false;
     isShoping = false;
     activeTileShopping = undefined;
 }
 
 function openShopOfBuilding(activeTile) {
+    this.clickSound();
     activeTile.building.displayShop = true;
     isShoping = true;
     activeTileShopping = activeTile;
 }
 
 function closeShopOfBuilding(activeTile) {
+    this.clickSound();
     activeTile.building.displayShop = false;
     isShoping = false;
     activeTileShopping = undefined;
@@ -453,6 +459,7 @@ function closeShopOfBuilding(activeTile) {
 function checkBuyBuilding(event, activeTileShopping) {
     if (event.clientX > activeTileShopping.shop.slot1.position.x && event.clientX < activeTileShopping.shop.slot1.position.x + activeTileShopping.shop.slot1.width &&
         event.clientY > activeTileShopping.shop.slot1.position.y && event.clientY < activeTileShopping.shop.slot1.position.y + activeTileShopping.shop.slot1.height) {
+        this.clickSound();
         if (activeTileShopping && !activeTileShopping.isOccupied && coins - priceTower >= 0) {
             // buy new building
             coins -= priceTower;
@@ -476,15 +483,27 @@ function checkBuyBuilding(event, activeTileShopping) {
             });
             this.closeShopOfLand(activeTileShopping);
         }
+    } else if (event.clientX > activeTileShopping.shop.slot2.position.x && event.clientX < activeTileShopping.shop.slot2.position.x + activeTileShopping.shop.slot2.width &&
+        event.clientY > activeTileShopping.shop.slot2.position.y && event.clientY < activeTileShopping.shop.slot2.position.y + activeTileShopping.shop.slot2.height) {
+        this.clickSound();
+    } else if (event.clientX > activeTileShopping.shop.slot3.position.x && event.clientX < activeTileShopping.shop.slot3.position.x + activeTileShopping.shop.slot3.width &&
+        event.clientY > activeTileShopping.shop.slot3.position.y && event.clientY < activeTileShopping.shop.slot3.position.y + activeTileShopping.shop.slot3.height) {
+        this.clickSound();
+    } else if (event.clientX > activeTileShopping.shop.slot4.position.x && event.clientX < activeTileShopping.shop.slot4.position.x + activeTileShopping.shop.slot4.width &&
+        event.clientY > activeTileShopping.shop.slot4.position.y && event.clientY < activeTileShopping.shop.slot4.position.y + activeTileShopping.shop.slot4.height) {
+        this.clickSound();
     }
 }
 
 function checkUpgradeBuilding(event, activeTileShopping) {
+    const slot1 = activeTileShopping.building.shop.slot1;
+    const slot2 = activeTileShopping.building.shop.slot2;
+    const slot3 = activeTileShopping.building.shop.slot3;
+    const slot4 = activeTileShopping.building.shop.slot4;
     // detroy building
-    if (event.clientX > activeTileShopping.building.shop.slot3.position.x &&
-            event.clientX < activeTileShopping.building.shop.slot3.position.x + activeTileShopping.building.shop.slot3.width &&
-            event.clientY > activeTileShopping.building.shop.slot3.position.y &&
-            event.clientY < activeTileShopping.building.shop.slot3.position.y + activeTileShopping.building.shop.slot3.height) {
+    if (event.clientX > slot3.position.x && event.clientX < slot3.position.x + slot3.width &&
+        event.clientY > slot3.position.y && event.clientY < slot3.position.y + slot3.height) {
+        this.destroySound();
         coins += 30;
         for (let index = 0; index < buildings.length; index++) {
             const building = buildings[index];
@@ -502,37 +521,45 @@ function checkUpgradeBuilding(event, activeTileShopping) {
         activeTileShopping.displayShop = false;
         isShoping = false;
         activeTileShopping = undefined;
-    } else if (event.clientX > activeTileShopping.building.shop.slot1.position.x &&
-        event.clientX < activeTileShopping.building.shop.slot1.position.x + activeTileShopping.building.shop.slot1.width &&
-        event.clientY > activeTileShopping.building.shop.slot1.position.y &&
-        event.clientY < activeTileShopping.building.shop.slot1.position.y + activeTileShopping.building.shop.slot1.height &&
-        coins - priceTower >= 0) {
-        for (let index = 0; index < buildings.length; index++) {
-            const building = buildings[index];
-            if (building.buildingId === activeTileShopping.building.buildingId) {
-                buildings.splice(index, 1);
-                coins -= priceTower;
-                const tower = activeTileShopping.building.tower.tw1;
-                const building = new Building({
-                    position: {
-                        x: activeTileShopping.position.x,
-                        y: activeTileShopping.position.y
-                    },
-                    scale: tower.scale,
-                    tower: tower,
-                    buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100)),
-                    width: 128,
-                    height: 144
-                });
-                buildings.push(building);
-                activeTileShopping.building = building;
-                buildings.sort((a, b) => {
-                    return a.position.y - b.position.y
-                });
-                this.closeShopOfLand(activeTileShopping);
-                break;
+    } else if (event.clientX > slot1.position.x && event.clientX < slot1.position.x + slot1.width &&
+        event.clientY > slot1.position.y && event.clientY < slot1.position.y + slot1.height) {
+        this.clickSound();
+        if (coins - priceTower >= 0 && !activeTileShopping.building.upgrade) {
+            // upgrade building slot 1
+            for (let index = 0; index < buildings.length; index++) {
+                const building = buildings[index];
+                if (building.buildingId === activeTileShopping.building.buildingId) {
+                    buildings.splice(index, 1);
+                    coins -= priceTower;
+                    const tower = activeTileShopping.building.tower.tw1;
+                    const building = new Building({
+                        position: {
+                            x: activeTileShopping.position.x,
+                            y: activeTileShopping.position.y
+                        },
+                        scale: tower.scale,
+                        tower: tower,
+                        buildingId: (Math.floor(Math.random() * 100) * Math.floor(Math.random() * 100)),
+                        width: 128,
+                        height: 144
+                    });
+                    building.upgrade = true;
+                    buildings.push(building);
+                    activeTileShopping.building = building;
+                    buildings.sort((a, b) => {
+                        return a.position.y - b.position.y
+                    });
+                    this.closeShopOfLand(activeTileShopping);
+                    break;
+                }
             }
         }
+    } else if (event.clientX > slot2.position.x && event.clientX < slot2.position.x + slot2.width &&
+        event.clientY > slot2.position.y && event.clientY < slot2.position.y + slot2.height) {
+        this.clickSound();
+    } else if (event.clientX > slot4.position.x && event.clientX < slot4.position.x + slot4.width &&
+        event.clientY > slot4.position.y && event.clientY < slot4.position.y + slot4.height) {
+        this.clickSound();
     }
 }
 

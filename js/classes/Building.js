@@ -34,6 +34,7 @@ class Building extends Sprite {
         this.loadingPercent = 0;
         this.elapsed = 0;
         this.frameHold = 3;
+        this.upgrade = false;
     }
 
     draw() {
@@ -57,6 +58,9 @@ class Building extends Sprite {
                 this.loadingPercent += 1;
             }
             if (this.loadingPercent >= 100) {
+                const building_finish = new Audio();
+                building_finish.src = './sound/building_finish.wav';
+                building_finish.play();
                 this.loading = false;
             }
             c.fillStyle = 'green';
@@ -95,18 +99,9 @@ class Building extends Sprite {
     }
 
     shoot() {
-        var sound = document.createElement("audio");
-        sound.src = './sound/stone-shooting.mp3';
-        sound.setAttribute("preload", "auto");
-        sound.setAttribute("controls", "none");
-        sound.style.display = "none";
-        document.body.appendChild(sound);
-        sound.volume = 0.5;
-        sound.play();
-
-        setTimeout(() => {
-            sound.remove();
-        }, 500);
+        const stone_shooting = new Audio();
+        stone_shooting.src = './sound/stone-shooting1.flac';
+        stone_shooting.play();
         this.projectiles.push(
             new Projecttile({
                 position: {
