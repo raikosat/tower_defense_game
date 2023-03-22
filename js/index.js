@@ -363,19 +363,21 @@ function createEnemyDie(projectile) {
     const sound = new Audio();;
     sound.src = './sound/orc-death.mp3';
     sound.play();
+    const enemy = projectile.enemy;
+    const monster = projectile.enemy.monster;
     enemiesDie.push(new Enemy({
         position: {
-            x: projectile.enemy.position.x,
-            y: projectile.enemy.position.y
+            x: enemy.position.x,
+            y: enemy.position.y
         },
         health: 0,
-        healthMax: projectile.enemy.monster.health,
-        imageSrc: projectile.enemy.monster.die.imageDeathSrc,
-        framesMax: projectile.enemy.monster.die.framesMax,
-        scale: projectile.enemy.monster.die.scale,
-        width: projectile.enemy.monster.die.width,
-        height: projectile.enemy.monster.die.height,
-        waypoints: projectile.enemy.waypoints,
+        healthMax: monster.health,
+        imageSrc: monster.die.imageDeathSrc,
+        framesMax: monster.die.framesMax,
+        scale: monster.die.scale,
+        width: monster.die.width,
+        height: monster.die.height,
+        waypoints: enemy.waypoints,
         dead: true
     }));
 }
@@ -565,53 +567,55 @@ function checkUpgradeBuilding(event, activeTileShopping) {
 
 function hoverShopOfLand() {
     if (!activeTileShopping) return;
-    const slot1 = activeTileShopping.shop.slot1;
-    const slot2 = activeTileShopping.shop.slot2;
-    const slot3 = activeTileShopping.shop.slot3;
-    const slot4 = activeTileShopping.shop.slot4;
-    if (activeTileShopping && mouse.x > slot1.position.x && mouse.x < slot1.position.x + (slot1.width) &&
-        mouse.y > slot1.position.y && mouse.y < slot1.position.y + (slot1.height)) {
-        activeTileShopping.shop.slot1Hover = true;
-    } else if (activeTileShopping && mouse.x > slot2.position.x && mouse.x < slot2.position.x + (slot2.width) &&
-        mouse.y > slot2.position.y && mouse.y < slot2.position.y + (slot2.height)) {
-        activeTileShopping.shop.slot2Hover = true;
-    } else if (activeTileShopping && mouse.x > slot3.position.x && mouse.x < slot3.position.x + (slot3.width) &&
-        mouse.y > slot3.position.y && mouse.y < slot3.position.y + (slot3.height)) {
-        activeTileShopping.shop.slot3Hover = true;
-    } else if (activeTileShopping && mouse.x > slot4.position.x && mouse.x < slot4.position.x + (slot4.width) &&
-        mouse.y > slot4.position.y && mouse.y < slot4.position.y + (slot4.height)) {
-        activeTileShopping.shop.slot4Hover = true;
-    } else if (activeTileShopping) {
-        activeTileShopping.shop.slot1Hover = false;
-        activeTileShopping.shop.slot2Hover = false;
-        activeTileShopping.shop.slot3Hover = false;
-        activeTileShopping.shop.slot4Hover = false;
+    const shop = activeTileShopping.shop;
+    const slot1 = shop.slot1;
+    const slot2 = shop.slot2;
+    const slot3 = shop.slot3;
+    const slot4 = shop.slot4;
+    if (mouse.x > slot1.position.x && mouse.x < slot1.position.x + slot1.width &&
+        mouse.y > slot1.position.y && mouse.y < slot1.position.y + slot1.height) {
+        shop.slot1Hover = true;
+    } else if (mouse.x > slot2.position.x && mouse.x < slot2.position.x + slot2.width &&
+        mouse.y > slot2.position.y && mouse.y < slot2.position.y + slot2.height) {
+        shop.slot2Hover = true;
+    } else if (mouse.x > slot3.position.x && mouse.x < slot3.position.x + slot3.width &&
+        mouse.y > slot3.position.y && mouse.y < slot3.position.y + slot3.height) {
+        shop.slot3Hover = true;
+    } else if (mouse.x > slot4.position.x && mouse.x < slot4.position.x + slot4.width &&
+        mouse.y > slot4.position.y && mouse.y < slot4.position.y + slot4.height) {
+        shop.slot4Hover = true;
+    } else {
+        shop.slot1Hover = false;
+        shop.slot2Hover = false;
+        shop.slot3Hover = false;
+        shop.slot4Hover = false;
     }
 }
 
 function hoverShopOfbuilding() {
     if (!activeTileShopping) return;
     if (!activeTileShopping.building) return;
-    const slot1 = activeTileShopping.building.shop.slot1;
-    const slot2 = activeTileShopping.building.shop.slot2;
-    const slot3 = activeTileShopping.building.shop.slot3;
-    const slot4 = activeTileShopping.building.shop.slot4;
-    if (activeTileShopping && activeTileShopping.building && mouse.x > slot1.position.x && mouse.x < slot1.position.x + (slot1.width) &&
-        mouse.y > slot1.position.y && mouse.y < slot1.position.y + (slot1.height)) {
-        activeTileShopping.building.shop.slot1Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot2.position.x && mouse.x < slot2.position.x + (slot2.width) &&
-        mouse.y > slot2.position.y && mouse.y < activeTileShopping.building.shop.slot2.position.y + (slot2.height)) {
-        activeTileShopping.building.shop.slot2Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot3.position.x && mouse.x < slot3.position.x + (slot3.width) &&
-        mouse.y > slot3.position.y && mouse.y < slot3.position.y + (slot3.height)) {
-        activeTileShopping.building.shop.slot3Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building && mouse.x > slot4.position.x && mouse.x < slot4.position.x + (activeTileShopping.building.shop.slot4.width) &&
-        mouse.y > slot4.position.y && mouse.y < slot4.position.y + (slot4.height)) {
-        activeTileShopping.building.shop.slot4Hover = true;
-    } else if (activeTileShopping && activeTileShopping.building) {
-        activeTileShopping.building.shop.slot1Hover = false;
-        activeTileShopping.building.shop.slot2Hover = false;
-        activeTileShopping.building.shop.slot3Hover = false;
-        activeTileShopping.building.shop.slot4Hover = false;
+    const shop = activeTileShopping.building.shop;
+    const slot1 = shop.slot1;
+    const slot2 = shop.slot2;
+    const slot3 = shop.slot3;
+    const slot4 = shop.slot4;
+    if (mouse.x > slot1.position.x && mouse.x < slot1.position.x + slot1.width &&
+        mouse.y > slot1.position.y && mouse.y < slot1.position.y + slot1.height) {
+        shop.slot1Hover = true;
+    } else if (mouse.x > slot2.position.x && mouse.x < slot2.position.x + slot2.width &&
+        mouse.y > slot2.position.y && mouse.y < slot2.position.y + slot2.height) {
+        shop.slot2Hover = true;
+    } else if (mouse.x > slot3.position.x && mouse.x < slot3.position.x + slot3.width &&
+        mouse.y > slot3.position.y && mouse.y < slot3.position.y + slot3.height) {
+        shop.slot3Hover = true;
+    } else if (mouse.x > slot4.position.x && mouse.x < slot4.position.x + slot4.width &&
+        mouse.y > slot4.position.y && mouse.y < slot4.position.y + slot4.height) {
+        shop.slot4Hover = true;
+    } else {
+        shop.slot1Hover = false;
+        shop.slot2Hover = false;
+        shop.slot3Hover = false;
+        shop.slot4Hover = false;
     }
 }
