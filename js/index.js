@@ -200,10 +200,10 @@ function showWave() {
     document.querySelector('#flex-container').style.display = 'flex';
     document.querySelector('#wave').style.display = 'flex';
     document.querySelector('#wave').innerHTML = 'WAVE ' + waveCurrent;
+    isLoadingSpawnEnemies = true;
     setTimeout(() => {
         document.querySelector('#flex-container').style.display = 'none';
         document.querySelector('#wave').style.display = 'none';
-        isLoadingSpawnEnemies = true;
     }, 1500);
 }
 
