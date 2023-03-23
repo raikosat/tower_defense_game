@@ -13,14 +13,14 @@ const explosions = [];
 const enemies = [];
 const enemiesDie = [];
 const image = new Image();
-image.src = './img/map/gameMap.png';
+image.src = 'img/map/gameMap.png';
 const mouse = {
     x: undefined,
     y: undefined
 }
 const priceTower = 70;
 const soundBg = new Audio();
-soundBg.src = './sound/sound-background.mp3';
+soundBg.src = 'sound/sound-background.mp3';
 soundBg.loop = true;
 soundBg.volume = 0.5;
 
@@ -39,7 +39,7 @@ let isPaused = false;
 
 const heart = new Sprite({
     position: { x: canvas.width - 130, y: 13 },
-    imageSrc: './img/icon/heart.png',
+    imageSrc: 'img/icon/heart.png',
     scale: 0.22,
     width: 189,
     height: 160
@@ -47,15 +47,23 @@ const heart = new Sprite({
 
 const coin = new Sprite({
     position: { x: heart.position.x - 150, y: 10 },
-    imageSrc: './img/icon/coin.png',
+    imageSrc: 'img/icon/coin.png',
     scale: 0.25,
     width: 160,
     height: 160
 });
 
+const i_monster = new Sprite({
+    position: { x: coin.position.x - 160, y: 10 },
+    imageSrc: 'img/icon/loading_spawn.png',
+    scale: 0.26,
+    width: 162,
+    height: 145
+});
+
 const b_skip = new Sprite({
     position: { x: 100, y: canvas.height - 50 },
-    imageSrc: './img/icon/b_skip.png',
+    imageSrc: 'img/icon/b_skip.png',
     scale: 0.35,
     width: 130,
     height: 78
@@ -63,7 +71,7 @@ const b_skip = new Sprite({
 
 const b_pause = new Sprite({
     position: { x: 20, y: canvas.height - 50 },
-    imageSrc: './img/icon/b_pause.png',
+    imageSrc: 'img/icon/b_pause.png',
     scale: 0.35,
     width: 169,
     height: 78
@@ -129,6 +137,7 @@ function startGame() {
     soundBackground();
     drawHeart();
     drawCoin();
+    drawIMonster();
     drawSkip();
     drawPause();
     drawLandFlag();
@@ -233,6 +242,7 @@ function animate(timeStamp) {
     c.drawImage(image, 0, 0);
     drawHeart();
     drawCoin();
+    drawIMonster();
     drawSkip();
     drawPause();
     loadingSpawnEnemies();
@@ -540,16 +550,26 @@ function drawCoin() {
     c.fillText(coins, coin.position.x + (coin.width * coin.scale) + 10, coin.position.y + coin.height * coin.scale);
 }
 
+function drawIMonster() {
+    i_monster.draw();
+    const content = waveCurrent + '/' + wavesMap1.length;
+    c.font = "bold 25px 'Press Start 2P', cursive";
+    c.fillStyle = 'black';
+    c.fillText(content, i_monster.position.x + (i_monster.width * i_monster.scale) + 8, i_monster.position.y + i_monster.height * i_monster.scale - 2);
+    c.fillStyle = 'white';
+    c.fillText(content, i_monster.position.x + (i_monster.width * i_monster.scale) + 10, i_monster.position.y + i_monster.height * i_monster.scale);
+}
+
 function drawSkip() {
     if (speedGame === 3) {
         b_skip.image.src = './img/icon/b_skip_selected.png';
     }
     b_skip.draw();
-    c.font = "bold 18px 'Press Start 2P', cursive";
+    c.font = "bold 22px 'Press Start 2P', cursive";
     c.fillStyle = 'black';
-    c.fillText('X' + speedGame, b_skip.position.x + 48, b_skip.position.y + 23);
+    c.fillText('X' + speedGame, b_skip.position.x + 48, b_skip.position.y + 25);
     c.fillStyle = 'yellow';
-    c.fillText('X' + speedGame, b_skip.position.x + 50, b_skip.position.y + 25);
+    c.fillText('X' + speedGame, b_skip.position.x + 50, b_skip.position.y + 27);
 }
 
 function drawPause() {

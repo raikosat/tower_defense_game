@@ -18,6 +18,7 @@ class Shop extends Sprite {
     }
 
     draw() {
+        c.lineWidth = 1;
         if (this.slot1Hover) {
             c.strokeStyle = 'white';
             c.strokeRect(this.slot1.position.x, this.slot1.position.y, this.slot1.width, this.slot1.height);
