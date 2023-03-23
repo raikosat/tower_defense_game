@@ -118,12 +118,25 @@ function reset() {
     hearts = 10;
     coins = 250;
     speedGame = 1;
+    waveCurrent = 1;
     buildings.splice(0, buildings.length);
     placementTiles.splice(0, placementTiles.length);
     explosions.splice(0, explosions.length);
     enemies.splice(0, enemies.length);
     enemiesDie.splice(0, enemiesDie.length);
     this.initPlacementTilesData();
+}
+
+function drawIcon() {
+    const width = (heart.position.x + (heart.width * heart.scale) + 75) - i_monster.position.x;
+    const height = i_monster.height * i_monster.scale + 10;
+    c.fillStyle = 'rgb(255, 255, 255, 0.5)';
+    c.fillRect(i_monster.position.x - 5, i_monster.position.y - 5, width, height);
+    drawHeart();
+    drawCoin();
+    drawIMonster();
+    drawSkip();
+    drawPause();
 }
 
 function startGame() {
@@ -137,11 +150,7 @@ function startGame() {
     reset();
     createPlacementTilesData2D();
     soundBackground();
-    drawHeart();
-    drawCoin();
-    drawIMonster();
-    drawSkip();
-    drawPause();
+    drawIcon();
     drawLandFlag();
     isPaused = false;
     setTimeout(() => {
@@ -226,7 +235,7 @@ function loadingSpawnEnemies() {
     c.beginPath();
     c.strokeStyle = 'green';
     c.lineWidth = 4;
-    if (endAngle < 2 && timeLoadingSpawnEnemies % (3/speedGame) === 0) {
+    if (endAngle < 2 && timeLoadingSpawnEnemies % (3 / speedGame) === 0) {
         endAngle += 0.02;
     }
     if (endAngle >= 2) {
@@ -242,11 +251,7 @@ function animate(timeStamp) {
         return;
     }
     c.drawImage(image, 0, 0);
-    drawHeart();
-    drawCoin();
-    drawIMonster();
-    drawSkip();
-    drawPause();
+    drawIcon();
     loadingSpawnEnemies();
 
     timeInterval = 1000 / (fps * speedGame);
@@ -558,7 +563,7 @@ function drawIMonster() {
     c.font = "bold 25px 'Press Start 2P', cursive";
     c.fillStyle = 'black';
     c.fillText(content, i_monster.position.x + (i_monster.width * i_monster.scale) + 8, i_monster.position.y + i_monster.height * i_monster.scale - 2);
-    c.fillStyle = 'white';
+    c.fillStyle = 'yellow';
     c.fillText(content, i_monster.position.x + (i_monster.width * i_monster.scale) + 10, i_monster.position.y + i_monster.height * i_monster.scale);
 }
 
