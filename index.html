@@ -6,18 +6,18 @@
     <canvas id="canvas"></canvas>
     <div id="flex-container"
         style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: center; color: white;">
-        <div style="display: grid; grid-auto-rows: 100px">
-            <div id="startGame" class="startGame" style="display: flex; align-items: center; justify-content: center;"
+        <div style="display: grid; grid-auto-rows: 100px; justify-items: center">
+            <div id="startGame" class="startGame" style="display: flex; align-items: center; justify-content: center; width: 29%;"
                 onclick="startGame();">
                 <img src="img/icon/b_play.png" />
                 <img src="img/icon/b_play_selected.png" class="b_play-top" />
             </div>
-            <div id="restart" class="restart" style="display: none; align-items: center; justify-content: center;"
+            <div id="restart" class="restart" style="display: none; align-items: center; justify-content: center; width: 29%;"
                 onclick="startGame();">
                 <img id="b_play" src="img/icon/b_restart.png" />
                 <img id="b_play" src="img/icon/b_restart_selected.png" class="b_restart-top" />
             </div>
-            <div id="continue" class="continue" style="display: none; align-items: center; justify-content: center;" onclick="continueGame();">
+            <div id="continue" class="continue" style="display: none; align-items: center; justify-content: center; width: 29%;" onclick="continueGame();">
                 <img id="b_play" src="img/icon/b_continue.png"/>
                 <img id="b_play" src="img/icon/b_continue_selected.png" class="b_continue-top" />
             </div>

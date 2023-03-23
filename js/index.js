@@ -13,7 +13,8 @@ const explosions = [];
 const enemies = [];
 const enemiesDie = [];
 const image = new Image();
-image.src = 'img/map/gameMap.png';
+// image.src = 'img/map/gameMap.png';
+image.src = 'img/background.png';
 const mouse = {
     x: undefined,
     y: undefined
@@ -131,6 +132,7 @@ function startGame() {
     document.querySelector('#continue').style.display = 'none';
     document.querySelector('#restart').style.display = 'none';
     document.querySelector('#gameOver').style.display = 'none';
+    image.src = 'img/map/gameMap.png';
     c.drawImage(image, 0, 0);
     reset();
     createPlacementTilesData2D();
@@ -224,8 +226,8 @@ function loadingSpawnEnemies() {
     c.beginPath();
     c.strokeStyle = 'green';
     c.lineWidth = 4;
-    if (endAngle < 2 && timeLoadingSpawnEnemies % 1 === 0) {
-        endAngle += 0.01;
+    if (endAngle < 2 && timeLoadingSpawnEnemies % (3/speedGame) === 0) {
+        endAngle += 0.02;
     }
     if (endAngle >= 2) {
         isLoadingSpawnEnemies = false;
