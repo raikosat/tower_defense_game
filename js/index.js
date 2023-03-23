@@ -124,14 +124,14 @@ function startGame() {
     document.querySelector('#restart').style.display = 'none';
     document.querySelector('#gameOver').style.display = 'none';
     c.drawImage(image, 0, 0);
-    this.reset();
-    this.createPlacementTilesData2D();
-    this.soundBackground();
-    this.drawHeart();
-    this.drawCoin();
-    this.drawSkip();
-    this.drawPause();
-    this.drawLandFlag();
+    reset();
+    createPlacementTilesData2D();
+    soundBackground();
+    drawHeart();
+    drawCoin();
+    drawSkip();
+    drawPause();
+    drawLandFlag();
     isPaused = false;
     setTimeout(() => {
         spawnEnemies();
@@ -183,7 +183,47 @@ function showWave() {
     setTimeout(() => {
         document.querySelector('#flex-container').style.display = 'none';
         document.querySelector('#wave').style.display = 'none';
-    }, 1000);
+        isLoadingSpawnEnemies = true;
+    }, 1500);
+}
+
+const imageLoadingSpawn = new Image();
+imageLoadingSpawn.src = 'img/icon/loading_spawn.png';
+let timeLoadingSpawnEnemies = 0;
+let isLoadingSpawnEnemies = false;
+let endAngle = 0;
+function loadingSpawnEnemies() {
+    if (!isLoadingSpawnEnemies) return;
+    timeLoadingSpawnEnemies++;
+    const x = 50;
+    const y = 450;
+    const scale = 0.3;
+    const widthScale = imageLoadingSpawn.width * scale;
+    const heightScale = imageLoadingSpawn.height * scale;
+
+    c.beginPath();
+    c.fillStyle = 'rgb(255,250,250, 0.3)';
+    c.arc(x + widthScale / 2, y + heightScale / 2, 30, 0, Math.PI * 2);
+    c.fill();
+
+    c.drawImage(imageLoadingSpawn, 0, 0, imageLoadingSpawn.width, imageLoadingSpawn.height,
+        x, y, widthScale, heightScale
+    );
+    // c.strokeStyle = 'white';
+    // c.strokeRect(x, y, widthScale, heightScale);
+
+    c.beginPath();
+    c.strokeStyle = 'green';
+    c.lineWidth = 4;
+    if (endAngle < 2 && timeLoadingSpawnEnemies % 1 === 0) {
+        endAngle += 0.01;
+    }
+    if (endAngle >= 2) {
+        isLoadingSpawnEnemies = false;
+        endAngle = 0;
+    }
+    c.arc(x + widthScale / 2, y + heightScale / 2, 30, 0, Math.PI * endAngle);
+    c.stroke();
 }
 
 function animate(timeStamp) {
@@ -191,31 +231,34 @@ function animate(timeStamp) {
         return;
     }
     c.drawImage(image, 0, 0);
-    this.drawHeart();
-    this.drawCoin();
-    this.drawSkip();
-    this.drawPause();
+    drawHeart();
+    drawCoin();
+    drawSkip();
+    drawPause();
+    loadingSpawnEnemies();
 
     timeInterval = 1000 / (fps * speedGame);
     let deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     const animationId = requestAnimationFrame(animate);
 
-    this.trackingEnemyIntoEndMap(deltaTime, animationId);
+    if (!isLoadingSpawnEnemies) {
+        trackingEnemyIntoEndMap(deltaTime, animationId);
+    }
 
-    this.animationExplosions(deltaTime);
+    animationExplosions(deltaTime);
 
-    this.animationEnemiesDie(deltaTime);
+    animationEnemiesDie(deltaTime);
 
-    this.trackingTotalAmountOfEnemies(deltaTime);
+    trackingTotalAmountOfEnemies(deltaTime);
 
     // order display shop of building and shop of land
     if (activeTile && activeTile.displayShop) {
-        this.animationBuilding(speedGame, deltaTime, timeInterval);
-        this.drawLandFlag();
+        animationBuilding(speedGame, deltaTime, timeInterval);
+        drawLandFlag();
     } else {
-        this.drawLandFlag();
-        this.animationBuilding(speedGame, deltaTime, timeInterval);
+        drawLandFlag();
+        animationBuilding(speedGame, deltaTime, timeInterval);
     }
 }
 
