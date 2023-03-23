@@ -1,5 +1,5 @@
 class Enemy extends Sprite {
-    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1 , waypoints, monster, width, height, dead = false, frameYMax}) {
+    constructor({ position = { x: 0, y: 0 }, health = 100, healthMax = 100, imageSrc, framesMax, scale = 1, offset, speed = 1, waypoints, monster, width, height, dead = false, frameYMax }) {
         super({
             position,
             imageSrc: imageSrc,
@@ -28,15 +28,18 @@ class Enemy extends Sprite {
             x: 0,
             y: 0
         };
-        this.bounes = 5;
+        this.bounes = monster.bonus;
         this.speed = speed;
         this.waypoints = waypoints;
         this.monster = monster;
         this.dead = dead;
         this.frameYMax = frameYMax;
+        this.imageBonus = new Image();
+        this.imageBonus.src = 'img/icon/coin.png';
     }
 
     draw() {
+        if (this.dead) this.drawBonus();
         super.draw();
         this.drawHealthBar();
     }
@@ -49,14 +52,14 @@ class Enemy extends Sprite {
         // c.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
         // c.strokeStyle = 'red';
         // c.stroke();
-        
+
         if (!this.waypoints) return;
         const waypoint = this.waypoints[this.waypointIndex];
 
         if (this.dead || this.frameYMax === 1) {
             this.frames.frameY = 0;
         } else {
-            if(waypoint.x > this.center.x) {
+            if (waypoint.x > this.center.x) {
                 this.frames.frameY = 0;
             } else {
                 this.frames.frameY = 1;
@@ -98,5 +101,16 @@ class Enemy extends Sprite {
 
         c.fillStyle = 'green';
         c.fillRect(this.position.x + xoffsetHealth, this.position.y - yoffsetHealth, widthHealth * (this.health / this.healthMax), 5);
+    }
+
+    drawBonus() {
+        const sx = this.position.x + this.widthScale - 25;
+        const sy = this.position.y + this.heightScale;
+        const w = 160 * 0.12;
+        const h = 160 * 0.12;
+        c.drawImage(this.imageBonus, 0, 0, 160, 160, sx, sy, w, h);
+        c.font = "bold 16px 'Press Start 2P', cursive";
+        c.fillStyle = 'rgb(255,215,0)';
+        c.fillText(this.bounes, sx + 22, sy + 18);
     }
 }

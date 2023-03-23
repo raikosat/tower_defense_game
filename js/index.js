@@ -3,7 +3,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1280;
 canvas.height = 768;
 c.fillStyle = 'white';
-c.font = "12px Changa One";
+c.font = "bold 12px 'Press Start 2P', cursive";
 c.fillRect(0, 0, canvas.width, canvas.height);
 
 const placementTilesData2D = [];
@@ -38,17 +38,17 @@ let lastTime = 0;
 let isPaused = false;
 
 const heart = new Sprite({
-    position: { x: canvas.width - 90, y: 15 },
+    position: { x: canvas.width - 130, y: 13 },
     imageSrc: './img/icon/heart.png',
-    scale: 0.1,
-    width: 270,
-    height: 229
+    scale: 0.22,
+    width: 189,
+    height: 160
 });
 
 const coin = new Sprite({
-    position: { x: canvas.width - 180, y: 10 },
+    position: { x: heart.position.x - 150, y: 10 },
     imageSrc: './img/icon/coin.png',
-    scale: 0.18,
+    scale: 0.25,
     width: 160,
     height: 160
 });
@@ -467,7 +467,8 @@ function createEnemyDie(projectile) {
         width: monster.die.width,
         height: monster.die.height,
         waypoints: enemy.waypoints,
-        dead: true
+        dead: true,
+        monster: monster
     }));
 }
 
@@ -480,16 +481,20 @@ function createExplosions(projectile, damage) {
 
 function drawHeart() {
     heart.draw();
-    c.fillStyle = 'white';
-    c.font = "bold 24px Changa One cursive";
-    c.fillText(hearts, canvas.width - 50, 35);
+    c.font = "bold 27px 'Press Start 2P', cursive";
+    c.fillStyle = 'black';
+    c.fillText(hearts, heart.position.x + (heart.width * heart.scale) + 8, heart.position.y + heart.height * heart.scale - 2);
+    c.fillStyle = 'yellow';
+    c.fillText(hearts, heart.position.x + (heart.width * heart.scale) + 10, heart.position.y + heart.height * heart.scale);
 }
 
 function drawCoin() {
     coin.draw();
-    c.fillStyle = 'white';
-    c.font = "bold 24px Changa One cursive";
-    c.fillText(coins, canvas.width - 140, 35);
+    c.font = "bold 27px 'Press Start 2P', cursive";
+    c.fillStyle = 'black';
+    c.fillText(coins, coin.position.x + (coin.width * coin.scale) + 8, coin.position.y + coin.height * coin.scale - 2);
+    c.fillStyle = 'yellow';
+    c.fillText(coins, coin.position.x + (coin.width * coin.scale) + 10, coin.position.y + coin.height * coin.scale);
 }
 
 function drawSkip() {
@@ -497,9 +502,11 @@ function drawSkip() {
         b_skip.image.src = './img/icon/b_skip_selected.png';
     }
     b_skip.draw();
-    c.fillStyle = 'white';
-    c.font = "bold 25px Changa One cursive";
-    c.fillText('X' + speedGame, b_skip.position.x + 50, b_skip.position.y + 22);
+    c.font = "bold 18px 'Press Start 2P', cursive";
+    c.fillStyle = 'black';
+    c.fillText('X' + speedGame, b_skip.position.x + 48, b_skip.position.y + 23);
+    c.fillStyle = 'yellow';
+    c.fillText('X' + speedGame, b_skip.position.x + 50, b_skip.position.y + 25);
 }
 
 function drawPause() {
@@ -602,7 +609,7 @@ function checkUpgradeBuilding(event, activeTileShopping) {
     if (event.clientX > slot3.position.x && event.clientX < slot3.position.x + slot3.width &&
         event.clientY > slot3.position.y && event.clientY < slot3.position.y + slot3.height) {
         this.destroySound();
-        coins += 30;
+        coins += 50;
         for (let index = 0; index < buildings.length; index++) {
             const building = buildings[index];
             if (building.position.x === activeTileShopping.building.position.x &&

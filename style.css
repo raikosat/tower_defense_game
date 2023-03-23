@@ -1,12 +1,22 @@
+@font-face {
+    font-family: 'Press Start 2P', cursive;
+    src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+}
+
+canvas {
+    font-family: 'Press Start 2P', cursive;
+}
+
 body {
     background-color: black;
-    font-family: 'Changa One', cursive;
+    font-family: 'Press Start 2P', cursive;
     box-sizing: border-box;
 }
 
 .startGame {
     position: relative;
     display: inline-block;
+    font-family: 'Press Start 2P', cursive;
 }
 
 .startGame .b_play-top {

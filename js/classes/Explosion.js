@@ -1,5 +1,5 @@
 class Explosion extends Sprite {
-    constructor({position = {x: 0, y: 0}, damage}) {
+    constructor({ position = { x: 0, y: 0 }, damage}) {
         super({
             position: position,
             imageSrc: './img/buildings/explosion.png',
@@ -15,7 +15,9 @@ class Explosion extends Sprite {
 
     draw() {
         super.draw();
-        c.fillStyle = 'yellow';
+        // dislay dame
+        c.font = "9px 'Press Start 2P', cursive";
+        c.fillStyle = 'rgb(255,0,0, 0.7)';
         c.fillText(this.damage, this.position.x, this.position.y);
     }
 
