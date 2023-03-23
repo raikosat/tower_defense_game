@@ -40,6 +40,7 @@ class Building extends Sprite {
     draw() {
         super.draw();
         if (this.displayShop) {
+            this.drawRadius();
             this.shop.update();
         }
     }
@@ -78,7 +79,7 @@ class Building extends Sprite {
 
         if (this.target || !this.target && this.frames.frameX !== 0) {
             if (speedGame === 3) {
-                if (this.elapsed % (this.frameHold/speedGame) === 0) {
+                if (this.elapsed % (this.frameHold / speedGame) === 0) {
                     this.frames.frameX++;
                     if (this.frames.frameX >= this.frames.max) {
                         this.frames.frameX = 0;
@@ -92,7 +93,7 @@ class Building extends Sprite {
             }
         }
         if (speedGame === 3) {
-            if (this.target && this.frames.frameX === this.frameShoot && this.elapsed % (this.frameHold/speedGame) === 0) this.shoot();
+            if (this.target && this.frames.frameX === this.frameShoot && this.elapsed % (this.frameHold / speedGame) === 0) this.shoot();
         } else {
             if (this.target && this.frames.frameX === this.frameShoot && this.frameTimer > (timeInterval)) this.shoot();
         }
@@ -114,5 +115,12 @@ class Building extends Sprite {
                 height: 26
             })
         );
+    }
+
+    drawRadius() {
+        c.beginPath();
+        c.fillStyle = 'rgba(60,179,113, 0.3)';
+        c.arc(this.center.x, this.center.y, this.radius, 0, Math.PI * 2);
+        c.fill();
     }
 }
